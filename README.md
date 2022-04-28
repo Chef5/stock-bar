@@ -5,6 +5,8 @@ VScode 插件 | A 股 | 港股 | 实时股票数据
 
 Github： https://github.com/Chef5/stock-watch
 
+ps：原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能。
+
 > FORK自： https://github.com/TDGarden/stock-watch
 
 ## 配置
@@ -57,4 +59,4 @@ Github： https://github.com/Chef5/stock-watch
 
 ## 开发贡献
 
-
+学习：[如何开发一款vscode插件](https://zhuanlan.zhihu.com/p/386196218)
