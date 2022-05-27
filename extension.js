@@ -65,7 +65,7 @@ function handleConfigChange() {
 
 function getStockCodes() {
 	const config = vscode.workspace.getConfiguration();
-	const stocks = Object.keys(config.get('stock-watch.stocks'));
+	const stocks = Object.keys(config.get('stock-bar.stocks'));
 	return stocks.map((code) => {
 		if (isNaN(Number(code[0]))) {
 			if (code.toLowerCase().indexOf('us_') > -1) {
@@ -83,12 +83,12 @@ function getStockCodes() {
 
 function getUpdateInterval() {
 	const config = vscode.workspace.getConfiguration();
-	return config.get('stock-watch.updateInterval');
+	return config.get('stock-bar.updateInterval');
 }
 
 function isShowTime() {
 	const config = vscode.workspace.getConfiguration();
-	const configShowTime = config.get('stock-watch.showTime');
+	const configShowTime = config.get('stock-bar.showTime');
 	let showTime = [0, 23];
 	if (
 		Array.isArray(configShowTime) &&
@@ -103,7 +103,7 @@ function isShowTime() {
 
 function getItemText(item) {
 	const config = vscode.workspace.getConfiguration();
-	const stocks = config.get('stock-watch.stocks');
+	const stocks = config.get('stock-bar.stocks');
   const customName = stocks[`${item.type.toLowerCase()}${item.symbol}`];
   const label = customName === null || customName === undefined ? `${item.type}${item.symbol}` : customName;
 	return `${label?label + ' ':label}${keepDecimal(item.price, calcFixedNumber(item))} ${keepDecimal(item.percent * 100, 2)}%`;
@@ -119,8 +119,8 @@ function getTooltipText(item) {
 
 function getItemColor(item) {
 	const config = vscode.workspace.getConfiguration();
-	const riseColor = config.get('stock-watch.riseColor');
-	const fallColor = config.get('stock-watch.fallColor');
+	const riseColor = config.get('stock-bar.riseColor');
+	const fallColor = config.get('stock-bar.fallColor');
 
 	return item.percent >= 0 ? riseColor : fallColor;
 }

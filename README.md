@@ -1,13 +1,18 @@
-# stock-watch
+# stock-bar
 
 VScode 插件 | A 股 | 港股 | 实时股票数据
 好好工作，股票涨停！
 
-Github： https://github.com/Chef5/stock-watch
+Github： https://github.com/Chef5/stock-bar
 
-ps：原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能。
+原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能，欢迎star或者fork
 
 > FORK自： https://github.com/TDGarden/stock-watch
+
+## 新功能
+
+- 自定义bar显示：底部默认只会显示股价、百分点这样的纯数字（比较隐秘一点），当然为了区分，也可以自定义显示股票的名称
+- 调整hover显示内容
 
 ## 配置
 
@@ -36,23 +41,24 @@ ps：原作者项目很久没有维护了，这里为了满足个人需求，因
   // 2.纳斯达克: US_NASDAQ
   // 3.标普500: US_SP500
 
-  "stock-watch.stocks": {
-    "sh000001": "上证指数"
+  // "股票代码": "自定义名称"，自定义名称可以为空字符串，自定义名称建议使用字母（更加隐秘）
+  "stock-bar.stocks": {
+    "sh000001": "上证"
   },
 
   // 配置轮询请求最新数据的时间间隔
-  "stock-watch.updateInterval": 10000
+  "stock-bar.updateInterval": 10000
 
 
   // 配置股票涨的颜色，默认为white。为什么不是red，红色像是报错，很刺眼。
-  "stock-watch.riseColor": "white"
+  "stock-bar.riseColor": "white"
 
 
-  // 配置股票跌的颜色，默认为green
-  "stock-watch.fallColor": "#999"
+  // 配置股票跌的颜色，默认为灰色
+  "stock-bar.fallColor": "#999"
 
-  // 配置展示的时间段，默认为[9, 15]，每十分钟判断一下
-  "stock-watch.showTime": [9, 15]
+  // 配置展示的时间段，默认为[9, 16]，每十分钟判断一下
+  "stock-bar.showTime": [9, 16]
 
 
 ```
@@ -60,3 +66,5 @@ ps：原作者项目很久没有维护了，这里为了满足个人需求，因
 ## 开发贡献
 
 学习：[如何开发一款vscode插件](https://zhuanlan.zhihu.com/p/386196218)
+
+如果有什么更好的建议，欢迎提issue、pr
