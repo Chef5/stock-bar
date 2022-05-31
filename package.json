@@ -2,7 +2,7 @@
 	"name": "stock-bar",
 	"displayName": "Stock Bar",
 	"description": "股票监控，底部状态栏实时更新",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "Chef",
 	"license": "MIT",
 	"keywords": [
