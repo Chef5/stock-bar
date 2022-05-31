@@ -1,11 +1,12 @@
-# stock-bar
+# Stock Bar
 
-VScode 插件 | A 股 | 港股 | 实时股票数据
-好好工作，股票涨停！
+VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
 
 Github： https://github.com/Chef5/stock-bar
 
-原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能，欢迎star或者fork
+![image](http://img.cdn.1zdz.cn/github/readme/stock-bar-plugin.png)
+
+> 原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能，欢迎star或者fork
 
 > FORK自： https://github.com/TDGarden/stock-watch
 
@@ -50,7 +51,7 @@ Github： https://github.com/Chef5/stock-bar
   "stock-bar.updateInterval": 10000
 
 
-  // 配置股票涨的颜色，默认为white。为什么不是red，红色像是报错，很刺眼。
+  // 配置股票涨的颜色，默认为white
   "stock-bar.riseColor": "white"
 
 

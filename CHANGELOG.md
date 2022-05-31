@@ -7,4 +7,8 @@
 
 ## [1.0.1]
 
-- feat: logo
+- feat: 自己设计了个logo
+
+## [1.0.2]
+
+- doc: update readme
