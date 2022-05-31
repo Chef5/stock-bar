@@ -4,7 +4,7 @@ VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
 
 Github： https://github.com/Chef5/stock-bar
 
-![image](http://img.cdn.1zdz.cn/github/readme/stock-bar-plugin.png)
+![image](https://raw.githubusercontent.com/Chef5/stock-bar/main/stock-bar-plugin.png)
 
 > 原作者项目很久没有维护了，这里为了满足个人需求，因此改动了部分代码，增强了部分功能，欢迎star或者fork
 
