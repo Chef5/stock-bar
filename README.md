@@ -51,8 +51,8 @@ Github： https://github.com/Chef5/stock-bar
   "stock-bar.updateInterval": 10000
 
 
-  // 配置股票涨的颜色，默认为white
-  "stock-bar.riseColor": "white"
+  // 配置股票涨的颜色，默认为当前主题文字颜色
+  "stock-bar.riseColor": ""
 
 
   // 配置股票跌的颜色，默认为灰色
