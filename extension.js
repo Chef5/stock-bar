@@ -7,16 +7,15 @@ let updateInterval = 10000;
 let timer = null;
 let showTimer = null;
 
-function activate(context) {
+exports.activate = function activate(context) {
 	init();
+	vscode.window.showWarningMessage("启动");
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(handleConfigChange)
 	);
 }
-exports.activate = activate;
 
-function deactivate() {}
-exports.deactivate = deactivate;
+exports.deactivate = function deactivate() {}
 
 function init() {
 	initShowTimeChecker();
