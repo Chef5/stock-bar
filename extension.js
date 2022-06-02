@@ -9,7 +9,6 @@ let showTimer = null;
 
 exports.activate = function activate(context) {
 	init();
-	vscode.window.showWarningMessage("启动");
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(handleConfigChange)
 	);
@@ -103,8 +102,8 @@ function isShowTime() {
 function getItemText(item) {
 	const config = vscode.workspace.getConfiguration();
 	const stocks = config.get('stock-bar.stocks');
-  const customName = stocks[`${item.type.toLowerCase()}${item.symbol}`];
-  const label = customName === null || customName === undefined ? `${item.type}${item.symbol}` : customName;
+  	const customName = stocks[`${item.type.toLowerCase()}${item.symbol}`];
+  	const label = customName === null || customName === undefined ? `${item.type}${item.symbol}` : customName;
 	return `${label?label + ' ':label}${keepDecimal(item.price, calcFixedNumber(item))} ${keepDecimal(item.percent * 100, 2)}%`;
 }
 
