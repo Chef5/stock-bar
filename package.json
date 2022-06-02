@@ -42,7 +42,7 @@
 				},
 				"stock-bar.fallColor": {
 					"type": "string",
-					"default": "#999999",
+					"default": "",
 					"description": "股票跌的颜色"
 				},
 				"stock-bar.showTime": {
