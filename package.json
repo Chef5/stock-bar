@@ -38,12 +38,12 @@
 				"stock-bar.riseColor": {
 					"type": "string",
 					"default": "",
-					"description": "股票涨的颜色，默认使用当前主题文字颜色"
+					"description": "股票涨的颜色，默认跟随系统"
 				},
 				"stock-bar.fallColor": {
 					"type": "string",
 					"default": "",
-					"description": "股票跌的颜色"
+					"description": "股票跌的颜色，默认跟随系统"
 				},
 				"stock-bar.showTime": {
 					"type": "array",
