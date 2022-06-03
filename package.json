@@ -37,12 +37,12 @@
 				},
 				"stock-bar.riseColor": {
 					"type": "string",
-					"default": "white",
+					"default": "",
 					"description": "股票涨的颜色"
 				},
 				"stock-bar.fallColor": {
 					"type": "string",
-					"default": "#999",
+					"default": "",
 					"description": "股票跌的颜色"
 				},
 				"stock-bar.showTime": {
