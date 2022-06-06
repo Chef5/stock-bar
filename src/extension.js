@@ -1,7 +1,8 @@
 const vscode = require('vscode');
 const logger = require('./logger');
-const axios = require('axios');
-const baseUrl = 'https://api.money.126.net/data/feed/';
+const { neteaseStockProvider } = require('./provider');
+const { calcFixedNumber, keepDecimal, codeConvert, isCurrentTimeInShowTime } = require('./utils');
+
 let statusBarItems = {};
 let stockCodes = [];
 let updateInterval = 10000;
@@ -65,19 +66,7 @@ function handleConfigChange() {
 function getStockCodes() {
 	const config = vscode.workspace.getConfiguration();
 	const stocks = Object.keys(config.get('stock-bar.stocks'));
-	return stocks.map((code) => {
-		if (isNaN(Number(code[0]))) {
-			if (code.toLowerCase().indexOf('us_') > -1) {
-				return code.toUpperCase();
-			} else if (code.indexOf('hk') > -1) {
-				return code;
-			} else {
-				return code.toLowerCase().replace('sz', '1').replace('sh', '0');
-			}
-		} else {
-			return (code[0] === '6' ? '0' : '1') + code;
-		}
-	});
+	return stocks.map(codeConvert);
 }
 
 function getUpdateInterval() {
@@ -88,16 +77,18 @@ function getUpdateInterval() {
 function isShowTime() {
 	const config = vscode.workspace.getConfiguration();
 	const configShowTime = config.get('stock-bar.showTime');
-	let showTime = [0, 23];
-	if (
-		Array.isArray(configShowTime) &&
-		configShowTime.length === 2 &&
-		configShowTime[0] <= configShowTime[1]
-	) {
-		showTime = configShowTime;
+	return isCurrentTimeInShowTime(configShowTime)
+}
+
+async function fetchAllData() {
+	logger.debug('call fetchAllData');
+	try {
+		displayData(
+			await neteaseStockProvider.fetch(stockCodes),
+		);
+	} catch (e){
+		logger.error('%O', e);
 	}
-	const now = new Date().getHours();
-	return now >= showTime[0] && now <= showTime[1];
 }
 
 function getItemText(item) {
@@ -124,34 +115,15 @@ function getItemColor(item) {
 	return item.percent >= 0 ? riseColor : fallColor;
 }
 
-function fetchAllData() {
+async function fetchAllData() {
 	logger.debug('call fetchAllData');
-	axios
-		.get(`${baseUrl}${stockCodes.join(',')}?callback=a`)
-		.then((rep) => {
-			try {
-				const result = JSON.parse(rep.data.slice(2, -2));
-				let data = [];
-				Object.keys(result).map((item) => {
-					if (!result[item].code) {
-						result[item].code = item; //兼容港股美股
-					}
-					data.push(result[item]);
-				});
-					displayData(data);
-			} catch (error) {
-				logger.error('%s', error.message);
-			}
-		})
-		.catch((error) => {
-			if (error.response) {
-				logger.error('%O', error.response);
-			  } else if (error.request) {
-				logger.error('%O', error.request);
-			  } else {
-				logger.error('%s', error.message);
-			  }
-		});
+	try {
+		displayData(
+			await neteaseStockProvider.fetch(stockCodes),
+		);
+	} catch (e){
+		logger.error('%O', e);
+	}
 }
 
 function displayData(data) {
@@ -177,44 +149,4 @@ function createStatusBarItem(item) {
 	barItem.tooltip = getTooltipText(item);
 	barItem.show();
 	return barItem;
-}
-
-function keepDecimal(num, fixed) {
-	var result = parseFloat(num);
-	if (isNaN(result)) {
-		return '--';
-	}
-	return result.toFixed(fixed);
-}
-
-function calcFixedNumber(item) {
-	var high =
-		String(item.high).indexOf('.') === -1
-			? 0
-			: String(item.high).length - String(item.high).indexOf('.') - 1;
-	var low =
-		String(item.low).indexOf('.') === -1
-			? 0
-			: String(item.low).length - String(item.low).indexOf('.') - 1;
-	var open =
-		String(item.open).indexOf('.') === -1
-			? 0
-			: String(item.open).length - String(item.open).indexOf('.') - 1;
-	var yest =
-		String(item.yestclose).indexOf('.') === -1
-			? 0
-			: String(item.yestclose).length -
-			  String(item.yestclose).indexOf('.') -
-			  1;
-	var updown =
-		String(item.updown).indexOf('.') === -1
-			? 0
-			: String(item.updown).length - String(item.updown).indexOf('.') - 1;
-	var max = Math.max(high, low, open, yest, updown);
-
-	if (max === 0) {
-		max = 2;
-	}
-
-	return max;
 }
