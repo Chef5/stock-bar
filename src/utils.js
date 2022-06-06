@@ -1,4 +1,3 @@
-
 function keepDecimal(num, fixed) {
 	var result = parseFloat(num);
 	if (isNaN(result)) {
@@ -23,9 +22,7 @@ function calcFixedNumber(item) {
 	var yest =
 		String(item.yestclose).indexOf('.') === -1
 			? 0
-			: String(item.yestclose).length -
-			  String(item.yestclose).indexOf('.') -
-			  1;
+			: String(item.yestclose).length - String(item.yestclose).indexOf('.') - 1;
 	var updown =
 		String(item.updown).indexOf('.') === -1
 			? 0
@@ -48,20 +45,20 @@ function calcFixedNumber(item) {
  * shxxxx  => 0xxxxx
  * 6xxxxx  => 0xxxxx
  * 0xxxxx  => 1xxxxx
- * @param {string} code 
- * @returns 
+ * @param {string} code
+ * @returns
  */
 function codeConvert(code) {
-    if (isNaN(Number(code[0]))) {
-        if (code.toLowerCase().indexOf('us_') > -1) {
-            return code.toUpperCase();
-        }
-        if (code.indexOf('hk') > -1) {
-            return code;
-        }
-        return code.toLowerCase().replace('sz', '1').replace('sh', '0');
-    }
-    return (code[0] === '6' ? '0' : '1') + code;
+	if (isNaN(Number(code[0]))) {
+		if (code.toLowerCase().indexOf('us_') > -1) {
+			return code.toUpperCase();
+		}
+		if (code.indexOf('hk') > -1) {
+			return code;
+		}
+		return code.toLowerCase().replace('sz', '1').replace('sh', '0');
+	}
+	return (code[0] === '6' ? '0' : '1') + code;
 }
 
 /**
@@ -81,8 +78,8 @@ function isCurrentTimeInShowTime(customShowTime) {
 }
 
 module.exports = {
-    keepDecimal,
-    calcFixedNumber,
-    codeConvert,
-    isCurrentTimeInShowTime,
-}
+	keepDecimal,
+	calcFixedNumber,
+	codeConvert,
+	isCurrentTimeInShowTime,
+};

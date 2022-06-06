@@ -2,7 +2,12 @@ const vscode = require('vscode');
 const logger = require('./logger');
 const { Configuration } = require('./configuration');
 const { neteaseStockProvider } = require('./provider');
-const { calcFixedNumber, keepDecimal, codeConvert, isCurrentTimeInShowTime } = require('./utils');
+const {
+	calcFixedNumber,
+	keepDecimal,
+	codeConvert,
+	isCurrentTimeInShowTime,
+} = require('./utils');
 
 let statusBarItems = {};
 let stockCodes = [];
@@ -12,11 +17,11 @@ let showTimer = null;
 exports.activate = function activate(context) {
 	init();
 	context.subscriptions.push(
-		vscode.workspace.onDidChangeConfiguration(handleConfigChange)
+		vscode.workspace.onDidChangeConfiguration(handleConfigChange),
 	);
-}
+};
 
-exports.deactivate = function deactivate() {}
+exports.deactivate = function deactivate() {};
 
 function init() {
 	initShowTimeChecker();
@@ -67,54 +72,46 @@ function getStockCodes() {
 }
 
 function isShowTime() {
-	return isCurrentTimeInShowTime(Configuration.getShowTime())
-}
-
-async function fetchAllData() {
-	logger.debug('call fetchAllData');
-	try {
-		displayData(
-			await neteaseStockProvider.fetch(stockCodes),
-		);
-	} catch (e){
-		logger.error('%O', e);
-	}
+	return isCurrentTimeInShowTime(Configuration.getShowTime());
 }
 
 function getItemText(item) {
 	const stocks = Configuration.getStocks();
-  	const customName = stocks[`${item.type.toLowerCase()}${item.symbol}`];
-  	const label = customName ?? `${item.type}${item.symbol}`;
-	return `${label?label + ' ':label}${keepDecimal(item.price, calcFixedNumber(item))} ${keepDecimal(item.percent * 100, 2)}%`;
+	const customName = stocks[`${item.type.toLowerCase()}${item.symbol}`];
+	const label = customName ?? `${item.type}${item.symbol}`;
+	return `${label ? label + ' ' : label}${keepDecimal(
+		item.price,
+		calcFixedNumber(item),
+	)} ${keepDecimal(item.percent * 100, 2)}%`;
 }
 
 function getTooltipText(item) {
-	return `【${item.name}】今日行情\n`
-	+ `涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n`
-	+ `最高：${item.high}   最低：${item.low}\n`
-	+ `今开：${item.open}   昨收：${item.yestclose}`;
+	return (
+		`【${item.name}】今日行情\n` +
+		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n` +
+		`最高：${item.high}   最低：${item.low}\n` +
+		`今开：${item.open}   昨收：${item.yestclose}`
+	);
 }
 
 function getItemColor(item) {
-	return item.percent >= 0 
-		? Configuration.getRiseColor() 
+	return item.percent >= 0
+		? Configuration.getRiseColor()
 		: Configuration.getFallColor();
 }
 
 async function fetchAllData() {
-	logger.debug('call fetchAllData');
+	logger.debug('call fetchAndUpdateStocks');
 	try {
-		displayData(
-			await neteaseStockProvider.fetch(stockCodes),
-		);
-	} catch (e){
+		displayData(await neteaseStockProvider.fetch(stockCodes));
+	} catch (e) {
 		logger.error('%O', e);
 	}
 }
 
 /**
- * 
- * @param {any[]} stocks 
+ *
+ * @param {any[]} stocks
  */
 function displayData(stocks) {
 	stocks.forEach((item) => {
@@ -122,7 +119,7 @@ function displayData(stocks) {
 		if (!statusBarItems[key]) {
 			statusBarItems[key] = vscode.window.createStatusBarItem(
 				vscode.StatusBarAlignment.Left,
-				0 - stockCodes.indexOf(item.code)
+				0 - stockCodes.indexOf(item.code),
 			);
 			statusBarItems[key].show();
 		}
