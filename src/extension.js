@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const logger = require('./logger');
 const axios = require('axios');
 const baseUrl = 'https://api.money.126.net/data/feed/';
 let statusBarItems = {};
@@ -124,29 +125,32 @@ function getItemColor(item) {
 }
 
 function fetchAllData() {
-	console.log('fetchAllData');
+	logger.debug('call fetchAllData');
 	axios
 		.get(`${baseUrl}${stockCodes.join(',')}?callback=a`)
-		.then(
-			(rep) => {
-				try {
-					const result = JSON.parse(rep.data.slice(2, -2));
-					let data = [];
-					Object.keys(result).map((item) => {
-						if (!result[item].code) {
-							result[item].code = item; //兼容港股美股
-						}
-						data.push(result[item]);
-					});
+		.then((rep) => {
+			try {
+				const result = JSON.parse(rep.data.slice(2, -2));
+				let data = [];
+				Object.keys(result).map((item) => {
+					if (!result[item].code) {
+						result[item].code = item; //兼容港股美股
+					}
+					data.push(result[item]);
+				});
 					displayData(data);
-				} catch (error) {}
-			},
-			(error) => {
-				console.error(error);
+			} catch (error) {
+				logger.error('%s', error.message);
 			}
-		)
+		})
 		.catch((error) => {
-			console.error(error);
+			if (error.response) {
+				logger.error('%O', error.response);
+			  } else if (error.request) {
+				logger.error('%O', error.request);
+			  } else {
+				logger.error('%s', error.message);
+			  }
 		});
 }
 
