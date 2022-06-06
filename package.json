@@ -19,7 +19,7 @@
 	"activationEvents": [
 		"*"
 	],
-	"main": "./extension",
+	"main": "./src/extension",
 	"contributes": {
 		"configuration": {
 			"properties": {
