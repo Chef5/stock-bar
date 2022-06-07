@@ -61,25 +61,8 @@ function codeConvert(code) {
 	return (code[0] === '6' ? '0' : '1') + code;
 }
 
-/**
- * 判断当前时间是否在区间内
- */
-function isCurrentTimeInShowTime(customShowTime) {
-	let showTime = [0, 23];
-	if (
-		Array.isArray(customShowTime) &&
-		customShowTime.length === 2 &&
-		customShowTime[0] <= customShowTime[1]
-	) {
-		showTime = customShowTime;
-	}
-	const now = new Date().getHours();
-	return now >= showTime[0] && now <= showTime[1];
-}
-
 module.exports = {
 	keepDecimal,
 	calcFixedNumber,
 	codeConvert,
-	isCurrentTimeInShowTime,
 };
