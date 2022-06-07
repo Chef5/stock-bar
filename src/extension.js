@@ -34,7 +34,7 @@ class Stock {
 
 function loadChoiceStocks() {
 	const data = Configuration.getStocks();
-	return Object.keys(data).map((v) => new Stock(v, data[v].alia));
+	return Object.keys(data).map((v) => new Stock(v, data[v]));
 }
 
 exports.activate = function activate(context) {
