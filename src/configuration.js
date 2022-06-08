@@ -16,7 +16,11 @@ class Configuration {
 	}
 
 	static getStocks() {
-		return Configuration.stockBarConfig().get('stocks');
+		const stocks = Configuration.stockBarConfig().get('stocks');
+		if (Object.prototype.toString.call(stocks) === '[object Object]') {
+			return this.updateStocks(stocks);
+		}
+		return stocks;
 	}
 
 	static getUpdateInterval() {
@@ -30,6 +34,14 @@ class Configuration {
 
 	static getFallColor() {
 		return Configuration.stockBarConfig().get('fallColor');
+	}
+
+	static updateStocks(stocks) {
+		const newStocks = Object.entries(stocks).map(([code, alias]) =>
+			alias ? { code, alias } : code,
+		);
+		Configuration.stockBarConfig().update('stocks', newStocks, 1);
+		return newStocks;
 	}
 }
 
