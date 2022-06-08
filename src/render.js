@@ -14,7 +14,7 @@ function getItemColor(item) {
 function getItemText(item) {
 	return format(
 		'%s %s %s%',
-		item.alia ?? item.name,
+		item.alias ?? item.name,
 		keepDecimal(item.price, calcFixedNumber(item)),
 		keepDecimal(item.percent * 100, 2),
 	);

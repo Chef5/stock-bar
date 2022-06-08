@@ -7,11 +7,11 @@ const { render } = require('./render');
 const { timer } = require('./timer');
 
 class Stock {
-	constructor(code, alia) {
+	constructor(code, alias) {
 		this.code = codeConvert(code);
 		this.symbol = code;
 		this.name = null;
-		this.alia = alia ?? null;
+		this.alias = alias ?? null;
 		this.price = 0;
 		this.updown = 0;
 		this.percent = 0;
@@ -33,8 +33,17 @@ class Stock {
 }
 
 function loadChoiceStocks() {
-	const data = Configuration.getStocks();
-	return Object.keys(data).map((v) => new Stock(v, data[v]));
+	return Configuration.getStocks().map((v) => {
+		if (typeof v === 'string') {
+			return new Stock(v);
+		}
+		if (typeof v === 'object') {
+			return new Stock(v.code, v.alias);
+		}
+		throw new Error(
+			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
+		);
+	});
 }
 
 exports.activate = function activate(context) {
