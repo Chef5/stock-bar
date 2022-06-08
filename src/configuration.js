@@ -8,6 +8,9 @@ class Configuration {
 		return vscode.workspace.getConfiguration('stock-bar');
 	}
 
+	/**
+	 * @deprecated
+	 */
 	static getShowTime() {
 		return Configuration.stockBarConfig().get('showTime');
 	}
@@ -17,7 +20,8 @@ class Configuration {
 	}
 
 	static getUpdateInterval() {
-		return Configuration.stockBarConfig().get('updateInterval');
+		const updateInterval = Configuration.stockBarConfig().get('updateInterval');
+		return typeof updateInterval === 'number' ? updateInterval : 10000;
 	}
 
 	static getRiseColor() {

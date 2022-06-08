@@ -24,10 +24,10 @@
 		"configuration": {
 			"properties": {
 				"stock-bar.stocks": {
-					"type": "object",
-					"default": {
-						"sh000001": "上证"
-					},
+					"type": "array",
+					"default": [
+						"sh000001"
+					],
 					"description": "股票代码:自定义名称 配置需要监控的股票代码，港股请加上hk前缀，美股加上US_前缀"
 				},
 				"stock-bar.updateInterval": {
