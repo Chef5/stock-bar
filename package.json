@@ -26,9 +26,13 @@
 				"stock-bar.stocks": {
 					"type": "array",
 					"default": [
-						"sh000001"
+						"sh000001",
+						{
+							"code": "sz000001",
+							"alias":  "平安"
+						}
 					],
-					"description": "股票代码:自定义名称 配置需要监控的股票代码，港股请加上hk前缀，美股加上US_前缀"
+					"description": "股票代码数组，配置需要监控的股票代码，港股请加上hk前缀，美股加上US_前缀"
 				},
 				"stock-bar.updateInterval": {
 					"type": "number",

@@ -42,10 +42,14 @@ Github： https://github.com/Chef5/stock-bar
   // 2.纳斯达克: US_NASDAQ
   // 3.标普500: US_SP500
 
-  // "股票代码": "自定义名称"，自定义名称可以为空字符串，自定义名称建议使用字母（更加隐秘）
-  "stock-bar.stocks": {
-    "sh000001": "上证"
-  },
+  // 股票代码数组，默认别名为空，别名建议使用字母（更加隐秘）
+  "stock-bar.stocks": [
+    "sh000001",
+    {
+      "code": "sz000001",
+      "alias":  "平安"
+    }
+  ],
 
   // 配置轮询请求最新数据的时间间隔
   "stock-bar.updateInterval": 10000

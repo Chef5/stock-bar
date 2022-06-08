@@ -11,7 +11,7 @@ class Stock {
 		this.code = codeConvert(code);
 		this.symbol = code;
 		this.name = null;
-		this.alias = alias ?? null;
+		this.alias = alias ?? '';
 		this.price = 0;
 		this.updown = 0;
 		this.percent = 0;
