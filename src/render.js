@@ -60,7 +60,7 @@ function render(stocks) {
 	// 更新股票的价格
 	for (const code in Object.keys(stocks)) {
 		stockHub.get(code).barItem.text = getItemText(stocks[code]);
-		stockHub.get(code).barItemcolor = getItemColor(stocks[code]);
+		stockHub.get(code).barItem.color = getItemColor(stocks[code]);
 		stockHub.get(code).barItem.tooltip = getTooltipText(stocks[code]);
 	}
 }
