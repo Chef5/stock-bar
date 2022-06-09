@@ -2,7 +2,7 @@
 	"name": "stock-bar",
 	"displayName": "Stock Bar",
 	"description": "股票监控，底部状态栏实时更新 A股|港股|美股|实时股票数据",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"publisher": "Chef",
 	"license": "MIT",
 	"keywords": [
@@ -32,12 +32,12 @@
 							"alias":  "平安"
 						}
 					],
-					"description": "股票代码数组，配置需要监控的股票代码，港股请加上hk前缀，美股加上US_前缀"
+					"description": "股票代码数组，配置需要监控的股票代码，具体配置规则请查看插件详情页"
 				},
 				"stock-bar.updateInterval": {
 					"type": "number",
 					"default": 10000,
-					"description": "配置轮询请求最新数据的时间间隔，单位：毫秒"
+					"description": "更新数据时间间隔，单位：毫秒"
 				},
 				"stock-bar.riseColor": {
 					"type": "string",
@@ -48,14 +48,6 @@
 					"type": "string",
 					"default": "",
 					"description": "股票跌的颜色，默认跟随系统"
-				},
-				"stock-bar.showTime": {
-					"type": "array",
-					"default": [
-						9,
-						16
-					],
-					"description": "显示的时间段"
 				}
 			}
 		}
