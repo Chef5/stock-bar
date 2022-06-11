@@ -1,7 +1,7 @@
 import StockInstance from './stock';
 
-export const keepDecimal = (num: string, fixed: number) => {
-	const result = parseFloat(num);
+export const keepDecimal = (num: number, fixed: number) => {
+	const result = parseFloat(String(num));
 	if (isNaN(result)) {
 		return '--';
 	}

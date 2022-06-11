@@ -2,7 +2,7 @@ import { format } from 'util';
 import * as vscode from 'vscode';
 import Configuration from './configuration';
 import StockInstance from './stock';
-const { calcFixedNumber, keepDecimal } = require('./utils');
+import { calcFixedNumber, keepDecimal } from './utils';
 
 const stockHub = new Map();
 
