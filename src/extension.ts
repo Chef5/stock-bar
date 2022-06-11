@@ -20,9 +20,7 @@ function loadChoiceStocks() {
 	});
 }
 
-exports.activate = function activate(context: {
-	subscriptions: vscode.Disposable[];
-}) {
+exports.activate = function activate(context: vscode.ExtensionContext) {
 	let stocks = loadChoiceStocks();
 
 	context.subscriptions.push(
