@@ -1,44 +1,18 @@
-const vscode = require('vscode');
-const logger = require('./logger');
-const { Configuration } = require('./configuration');
-const { neteaseStockProvider } = require('./provider');
-const { codeConvert } = require('./utils');
-const { render } = require('./render');
-const { timer } = require('./timer');
-
-class Stock {
-	constructor(code, alias) {
-		this.code = codeConvert(code);
-		this.symbol = code;
-		this.name = null;
-		this.alias = alias ?? '';
-		this.price = 0;
-		this.updown = 0;
-		this.percent = 0;
-		this.high = 0;
-		this.low = 0;
-		this.open = 0;
-		this.yestclose = 0;
-	}
-	update(origin) {
-		this.name = origin.name;
-		this.price = origin.price;
-		this.high = origin.high;
-		this.low = origin.low;
-		this.updown = origin.updown;
-		this.percent = origin.percent;
-		this.open = origin.open;
-		this.yestclose = origin.yestclose;
-	}
-}
+import * as vscode from 'vscode';
+import logger from './logger';
+import Configuration from './configuration';
+import { neteaseStockProvider } from './provider';
+import { render } from './render';
+import timer from './timer';
+import StockInstance from './stock';
 
 function loadChoiceStocks() {
 	return Configuration.getStocks().map((v) => {
 		if (typeof v === 'string') {
-			return new Stock(v);
+			return new StockInstance(v);
 		}
 		if (typeof v === 'object') {
-			return new Stock(v.code, v.alias);
+			return new StockInstance(v.code, v.alias);
 		}
 		throw new Error(
 			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
@@ -46,7 +20,9 @@ function loadChoiceStocks() {
 	});
 }
 
-exports.activate = function activate(context) {
+exports.activate = function activate(context: {
+	subscriptions: vscode.Disposable[];
+}) {
 	let stocks = loadChoiceStocks();
 
 	context.subscriptions.push(
@@ -55,7 +31,7 @@ exports.activate = function activate(context) {
 		}),
 	);
 
-	const task = async () => {
+	const task: () => any = async () => {
 		try {
 			// 从云端获取最新状态
 			logger.debug('call fetchData');

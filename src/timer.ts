@@ -1,4 +1,4 @@
-const { Configuration } = require('./configuration');
+import Configuration from './configuration';
 
 class Timer {
 	async await() {
@@ -38,9 +38,9 @@ class Timer {
 	 * @param {number} ms
 	 * @returns
 	 */
-	sleep(ms) {
-		return new Promise((resolve) => setTimeout(() => resolve(), ms));
+	sleep(ms: number) {
+		return new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
 	}
 }
 
-module.exports.timer = new Timer();
+export default new Timer();

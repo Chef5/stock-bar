@@ -1,17 +1,18 @@
-const { format } = require('util');
-const vscode = require('vscode');
-const { Configuration } = require('./configuration');
+import { format } from 'util';
+import * as vscode from 'vscode';
+import Configuration from './configuration';
+import StockInstance from './stock';
 const { calcFixedNumber, keepDecimal } = require('./utils');
 
 const stockHub = new Map();
 
-function getItemColor(item) {
+function getItemColor(item: StockInstance) {
 	return item.percent >= 0
 		? Configuration.getRiseColor()
 		: Configuration.getFallColor();
 }
 
-function getItemText(item) {
+function getItemText(item: StockInstance) {
 	return format(
 		'%s %s %s%',
 		item.alias ?? item.name,
@@ -20,7 +21,7 @@ function getItemText(item) {
 	);
 }
 
-function getTooltipText(item) {
+function getTooltipText(item: StockInstance) {
 	return (
 		`【${item.name}】今日行情\n` +
 		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n` +
@@ -34,7 +35,7 @@ function getTooltipText(item) {
  * @param {any} stocks
  * @returns
  */
-function render(stocks) {
+export const render = (stocks: any) => {
 	// 移除 配置更新后被删除的股票
 	const deleted = Array.from(stockHub.keys()).filter(
 		(code) => !(code in stocks),
@@ -63,6 +64,4 @@ function render(stocks) {
 		stockHub.get(code).barItem.color = getItemColor(stocks[code]);
 		stockHub.get(code).barItem.tooltip = getTooltipText(stocks[code]);
 	}
-}
-
-module.exports.render = render;
+};

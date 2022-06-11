@@ -1,12 +1,14 @@
-function keepDecimal(num, fixed) {
-	var result = parseFloat(num);
+import StockInstance from './stock';
+
+export const keepDecimal = (num: string, fixed: number) => {
+	const result = parseFloat(num);
 	if (isNaN(result)) {
 		return '--';
 	}
 	return result.toFixed(fixed);
-}
+};
 
-function calcFixedNumber(item) {
+export const calcFixedNumber = (item: StockInstance) => {
 	var high =
 		String(item.high).indexOf('.') === -1
 			? 0
@@ -34,7 +36,7 @@ function calcFixedNumber(item) {
 	}
 
 	return max;
-}
+};
 
 /**
  * 股票代码转换器，(网易接口需要该格式的代码)
@@ -48,7 +50,7 @@ function calcFixedNumber(item) {
  * @param {string} code
  * @returns
  */
-function codeConvert(code) {
+export const codeConvert = (code: string) => {
 	if (isNaN(Number(code[0]))) {
 		if (code.toLowerCase().indexOf('us_') > -1) {
 			return code.toUpperCase();
@@ -59,10 +61,4 @@ function codeConvert(code) {
 		return code.toLowerCase().replace('sz', '1').replace('sh', '0');
 	}
 	return (code[0] === '6' ? '0' : '1') + code;
-}
-
-module.exports = {
-	keepDecimal,
-	calcFixedNumber,
-	codeConvert,
 };

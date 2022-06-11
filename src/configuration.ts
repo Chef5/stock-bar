@@ -1,6 +1,7 @@
-const vscode = require('vscode');
+import * as vscode from 'vscode';
+import { Stocks } from '../types/config.d';
 
-class Configuration {
+export default class Configuration {
 	/**
 	 * @private
 	 */
@@ -18,9 +19,9 @@ class Configuration {
 	static getStocks() {
 		const stocks = Configuration.stockBarConfig().get('stocks');
 		if (Object.prototype.toString.call(stocks) === '[object Object]') {
-			return this.updateStocks(stocks);
+			return this.updateStocks(stocks as Object);
 		}
-		return stocks;
+		return stocks as Stocks;
 	}
 
 	static getUpdateInterval() {
@@ -36,13 +37,11 @@ class Configuration {
 		return Configuration.stockBarConfig().get('fallColor');
 	}
 
-	static updateStocks(stocks) {
-		const newStocks = Object.entries(stocks).map(([code, alias]) =>
+	static updateStocks(stocks: Object) {
+		const newStocks: Stocks = Object.entries(stocks).map(([code, alias]) =>
 			alias ? { code, alias } : code,
 		);
 		Configuration.stockBarConfig().update('stocks', newStocks, 1);
 		return newStocks;
 	}
 }
-
-module.exports.Configuration = Configuration;

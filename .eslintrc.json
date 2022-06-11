@@ -1,17 +1,34 @@
 {
-    "extends": [
-        "eslint:recommended",
-        "plugin:prettier/recommended"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 2022
-    },
-    "env": {
-        "es6": true,
-        "commonjs": true,
-        "node": true
-    },
-    "rules": {
-        "prettier/prettier": "error"
-    }
+	"root": true,
+	"parser": "@typescript-eslint/parser/dist",
+	"extends": [
+		"eslint:recommended",
+		"plugin:prettier/recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module"
+	},
+	"plugins": [
+			"@typescript-eslint"
+	],
+	"env": {
+		"es6": true,
+		"commonjs": true,
+		"node": true
+	},
+	"rules": {
+		"@typescript-eslint/naming-convention": "warn",
+		"@typescript-eslint/semi": "warn",
+		"prettier/prettier": "error",
+		"curly": "warn",
+		"eqeqeq": "warn",
+		"no-throw-literal": "warn",
+		"semi": "off"
+	},
+	"ignorePatterns": [
+			"out",
+			"dist",
+			"**/*.d.ts"
+	]
 }
