@@ -1,18 +1,18 @@
 import { format } from 'util';
 import * as vscode from 'vscode';
 import Configuration from './configuration';
-import StockInstance from './stock';
+import Stock from './stock';
 import { calcFixedNumber, keepDecimal } from './utils';
 
 const stockHub = new Map();
 
-function getItemColor(item: StockInstance) {
+function getItemColor(item: Stock) {
 	return item.percent >= 0
 		? Configuration.getRiseColor()
 		: Configuration.getFallColor();
 }
 
-function getItemText(item: StockInstance) {
+function getItemText(item: Stock) {
 	return format(
 		'%s %s %s%',
 		item.alias ?? item.name,
@@ -21,7 +21,7 @@ function getItemText(item: StockInstance) {
 	);
 }
 
-function getTooltipText(item: StockInstance) {
+function getTooltipText(item: Stock) {
 	return (
 		`【${item.name}】今日行情\n` +
 		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n` +

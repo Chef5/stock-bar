@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Stocks } from '../types/config.d';
+import { StockOptions } from 'stock-bar';
 
 export default class Configuration {
 	/**
@@ -21,7 +21,7 @@ export default class Configuration {
 		if (Object.prototype.toString.call(stocks) === '[object Object]') {
 			return this.updateStocks(stocks as Object);
 		}
-		return stocks as Stocks;
+		return stocks as StockOptions;
 	}
 
 	static getUpdateInterval() {
@@ -38,8 +38,8 @@ export default class Configuration {
 	}
 
 	static updateStocks(stocks: Object) {
-		const newStocks: Stocks = Object.entries(stocks).map(([code, alias]) =>
-			alias ? { code, alias } : code,
+		const newStocks: StockOptions = Object.entries(stocks).map(
+			([code, alias]) => (alias ? { code, alias } : code),
 		);
 		Configuration.stockBarConfig().update('stocks', newStocks, 1);
 		return newStocks;

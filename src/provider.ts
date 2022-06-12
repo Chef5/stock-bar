@@ -15,7 +15,7 @@ class NeteaseStockProvider {
 
 	/**
 	 *
-	 * @param {string[]} codes
+	 * @param codes
 	 */
 	async fetch(codes: string[]) {
 		try {

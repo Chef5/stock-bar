@@ -4,15 +4,15 @@ import Configuration from './configuration';
 import { neteaseStockProvider } from './provider';
 import { render } from './render';
 import timer from './timer';
-import StockInstance from './stock';
+import Stock from './stock';
 
 function loadChoiceStocks() {
 	return Configuration.getStocks().map((v) => {
 		if (typeof v === 'string') {
-			return new StockInstance(v);
+			return new Stock(v);
 		}
 		if (typeof v === 'object') {
-			return new StockInstance(v.code, v.alias);
+			return new Stock(v.code, v.alias);
 		}
 		throw new Error(
 			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
@@ -20,7 +20,7 @@ function loadChoiceStocks() {
 	});
 }
 
-exports.activate = function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
 	let stocks = loadChoiceStocks();
 
 	context.subscriptions.push(
@@ -59,6 +59,6 @@ exports.activate = function activate(context: vscode.ExtensionContext) {
 
 	// 丢进宏任务队列
 	setTimeout(task);
-};
+}
 
-exports.deactivate = function deactivate() {};
+export function deactivate() {}

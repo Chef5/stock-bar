@@ -1,32 +1,25 @@
 import { codeConvert } from './utils';
 
-export default class StockInstance {
+export default class Stock {
 	code: string;
 	symbol: string;
 	name: string | null;
 	alias: string;
-	price: number;
-	updown: number;
-	percent: number;
-	high: number;
-	low: number;
-	open: number;
-	yestclose: number;
+	price = 0;
+	updown = 0;
+	percent = 0;
+	high = 0;
+	low = 0;
+	open = 0;
+	yestclose = 0;
 
 	constructor(code: string, alias?: string | undefined) {
 		this.code = codeConvert(code);
 		this.symbol = code;
 		this.name = null;
 		this.alias = alias ?? '';
-		this.price = 0;
-		this.updown = 0;
-		this.percent = 0;
-		this.high = 0;
-		this.low = 0;
-		this.open = 0;
-		this.yestclose = 0;
 	}
-	update(origin: StockInstance) {
+	update(origin: Stock) {
 		this.name = origin.name;
 		this.price = origin.price;
 		this.high = origin.high;
