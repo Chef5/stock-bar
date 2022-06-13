@@ -61,4 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
 	setTimeout(task);
 }
 
-export function deactivate() {}
+export function deactivate() {
+	return;
+}
