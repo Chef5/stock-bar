@@ -1,36 +1,10 @@
-const vscode = require('vscode');
-const logger = require('./logger');
-const { Configuration } = require('./configuration');
-const { neteaseStockProvider } = require('./provider');
-const { codeConvert } = require('./utils');
-const { render } = require('./render');
-const { timer } = require('./timer');
-
-class Stock {
-	constructor(code, alias) {
-		this.code = codeConvert(code);
-		this.symbol = code;
-		this.name = null;
-		this.alias = alias ?? '';
-		this.price = 0;
-		this.updown = 0;
-		this.percent = 0;
-		this.high = 0;
-		this.low = 0;
-		this.open = 0;
-		this.yestclose = 0;
-	}
-	update(origin) {
-		this.name = origin.name;
-		this.price = origin.price;
-		this.high = origin.high;
-		this.low = origin.low;
-		this.updown = origin.updown;
-		this.percent = origin.percent;
-		this.open = origin.open;
-		this.yestclose = origin.yestclose;
-	}
-}
+import * as vscode from 'vscode';
+import logger from './logger';
+import Configuration from './configuration';
+import { neteaseStockProvider } from './provider';
+import { render } from './render';
+import timer from './timer';
+import Stock from './stock';
 
 function loadChoiceStocks() {
 	return Configuration.getStocks().map((v) => {
@@ -46,7 +20,7 @@ function loadChoiceStocks() {
 	});
 }
 
-exports.activate = function activate(context) {
+export function activate(context: vscode.ExtensionContext) {
 	let stocks = loadChoiceStocks();
 
 	context.subscriptions.push(
@@ -55,7 +29,7 @@ exports.activate = function activate(context) {
 		}),
 	);
 
-	const task = async () => {
+	const task: () => any = async () => {
 		try {
 			// 从云端获取最新状态
 			logger.debug('call fetchData');
@@ -85,6 +59,8 @@ exports.activate = function activate(context) {
 
 	// 丢进宏任务队列
 	setTimeout(task);
-};
+}
 
-exports.deactivate = function deactivate() {};
+export function deactivate() {
+	return;
+}
