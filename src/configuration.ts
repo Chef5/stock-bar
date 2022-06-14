@@ -19,7 +19,7 @@ export default class Configuration {
 	static getStocks() {
 		const stocks = Configuration.stockBarConfig().get('stocks');
 		if (Object.prototype.toString.call(stocks) === '[object Object]') {
-			return this.updateStocks(stocks as Object);
+			return this.updateStocks(stocks as Record<string, string>);
 		}
 		return stocks as StockOptions;
 	}
@@ -37,7 +37,7 @@ export default class Configuration {
 		return Configuration.stockBarConfig().get('fallColor');
 	}
 
-	static updateStocks(stocks: Object) {
+	static updateStocks(stocks: Record<string, string>) {
 		const newStocks: StockOptions = Object.entries(stocks).map(
 			([code, alias]) => (alias ? { code, alias } : code),
 		);

@@ -19,7 +19,7 @@
 	"activationEvents": [
 		"*"
 	],
-	"main": "./out/extension",
+	"main": "./dist/extension",
 	"contributes": {
 		"configuration": {
 			"properties": {
@@ -53,10 +53,13 @@
 		}
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
+		"vscode:prepublish": "npm run package",
+		"compile": "webpack",
+		"watch": "webpack --watch",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"compile-tests": "tsc -p . --outDir out",
+		"watch-tests": "tsc -p . -w --outDir out",
+		"pretest": "npm run compile-tests && npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},
@@ -74,7 +77,10 @@
 		"glob": "^8.0.3",
 		"mocha": "^10.0.0",
 		"prettier": "^2.6.2",
-		"typescript": "^4.7.2"
+		"ts-loader": "^9.3.0",
+		"typescript": "^4.7.2",
+		"webpack": "^5.73.0",
+		"webpack-cli": "^4.10.0"
 	},
 	"dependencies": {
 		"axios": "^0.27.2"
