@@ -2,7 +2,8 @@ import { format } from 'util';
 import * as vscode from 'vscode';
 import Configuration from './configuration';
 import Stock from './stock';
-import { calcFixedNumber, keepDecimal } from './utils';
+import StandardStock from './standardStock';
+import { templateReplace } from './utils';
 
 const stockHub = new Map();
 
@@ -13,21 +14,28 @@ function getItemColor(item: Stock) {
 }
 
 function getItemText(item: Stock) {
-	return format(
-		'%s %s %s%',
-		item.alias ?? item.name,
-		keepDecimal(item.price, calcFixedNumber(item)),
-		keepDecimal(item.percent * 100, 2),
-	);
+	const template = Configuration.getBarTemplate();
+	return templateReplace(item.barTemplate || template, new StandardStock(item));
+	// return format(
+	// 	'%s %s %s%',
+	// 	item.alias ?? item.name,
+	// 	keepDecimal(item.price, calcFixedNumber(item)),
+	// 	keepDecimal(item.percent * 100, 2),
+	// );
 }
 
 function getTooltipText(item: Stock) {
-	return (
-		`【${item.name}】今日行情\n` +
-		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n` +
-		`最高：${item.high}   最低：${item.low}\n` +
-		`今开：${item.open}   昨收：${item.yestclose}`
+	const template = Configuration.getTooltipTemplate();
+	return templateReplace(
+		item.tooltipTemplate || template,
+		new StandardStock(item),
 	);
+	// return (
+	// 	`【${item.name}】今日行情\n` +
+	// 	`涨跌：${item.updown}   百分：${item.percent}%\n` +
+	// 	`最高：${item.high}   最低：${item.low}\n` +
+	// 	`今开：${item.open}   昨收：${item.yestclose}`
+	// );
 }
 
 /**

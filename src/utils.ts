@@ -1,4 +1,6 @@
+import StandardStock from './standardStock';
 import Stock from './stock';
+import { StockVariableName } from './stock-bar';
 
 export const keepDecimal = (num: number, fixed: number) => {
 	const result = parseFloat(String(num));
@@ -8,7 +10,7 @@ export const keepDecimal = (num: number, fixed: number) => {
 	return result.toFixed(fixed);
 };
 
-export const calcFixedNumber = (item: Stock) => {
+export const calcFixedNumber = (item: StandardStock) => {
 	const high =
 		String(item.high).indexOf('.') === -1
 			? 0
@@ -39,6 +41,14 @@ export const calcFixedNumber = (item: Stock) => {
 };
 
 /**
+ * @description 计算手数
+ * @param num 股数
+ */
+export const calcVolume = (num: number) => {
+	return Math.ceil(num / 100);
+};
+
+/**
  * 股票代码转换器，(网易接口需要该格式的代码)
  * 转换之后 0 开头为上海市场 1开头为深圳市场
  * us_xxxx => us_xxxx
@@ -61,4 +71,33 @@ export const codeConvert = (code: string) => {
 		return code.toLowerCase().replace('sz', '1').replace('sh', '0');
 	}
 	return (code[0] === '6' ? '0' : '1') + code;
+};
+
+/**
+ * @description 模板替换，变量使用 ${}
+ * @param {string} template 模板
+ * @param {Record<string, any>} data 数据
+ * @returns
+ */
+export const templateReplace = (
+	template: string,
+	data: Record<string, any> = {},
+) => {
+	if (typeof template === 'string') {
+		return template.replace(
+			/\$\{\s*([$#@\-\d\w]+)\s*\}/gim,
+			(fullMath, grp: string) => {
+				const val = data[grp];
+				if (typeof val === 'function') {
+					return val();
+				} else if (val === null || val === undefined) {
+					return '';
+				} else if (typeof val === 'object' || typeof val === 'symbol') {
+					return val.toString();
+				}
+				return val.valueOf();
+			},
+		);
+	}
+	return '';
 };

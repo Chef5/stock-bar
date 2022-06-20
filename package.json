@@ -48,6 +48,16 @@
 					"type": "string",
 					"default": "",
 					"description": "股票跌的颜色，默认跟随系统"
+				},
+				"stock-bar.barTemplate": {
+					"type": "string",
+					"default": "${alias} ${price} ${percent}%",
+					"description": "底部状态栏数据显示模板"
+				},
+				"stock-bar.tooltipTemplate": {
+					"type": "string",
+					"default": "【${name}】今日行情\n涨跌：${updown}    百分：${percent}%\n最高：${high}    最低：${low}\n今开：${open}    昨收：${yestclose}",
+					"description": "股票详情数据显示模板"
 				}
 			}
 		}

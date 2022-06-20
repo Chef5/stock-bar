@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { StockOptions } from 'stock-bar';
+import { StockOptions } from './stock-bar';
 
 export default class Configuration {
 	/**
@@ -35,6 +35,14 @@ export default class Configuration {
 
 	static getFallColor() {
 		return Configuration.stockBarConfig().get('fallColor');
+	}
+
+	static getBarTemplate() {
+		return Configuration.stockBarConfig().get('barTemplate') as string;
+	}
+
+	static getTooltipTemplate() {
+		return Configuration.stockBarConfig().get('tooltipTemplate') as string;
 	}
 
 	static updateStocks(stocks: Record<string, string>) {

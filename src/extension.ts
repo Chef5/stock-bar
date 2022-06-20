@@ -12,7 +12,12 @@ function loadChoiceStocks() {
 			return new Stock(v);
 		}
 		if (typeof v === 'object') {
-			return new Stock(v.code, v.alias);
+			return new Stock(
+				v.code,
+				v.alias || '',
+				v.barTemplate || '',
+				v.tooltipTemplate || '',
+			);
 		}
 		throw new Error(
 			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
