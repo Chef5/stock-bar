@@ -1,6 +1,6 @@
-import Configuration from './configuration';
-import StandardStock from './standardStock';
-import { calcFixedNumber, calcVolume, getToday, keepDecimal } from './utils';
+import Configuration from '../../configuration';
+import StandardStock from '../../standardStock';
+import { calcFixedNumber, calcVolume, getToday, keepDecimal } from '../../utils';
 
 export default class Transformer {
 	static getStandardStock(data: Record<string, any>, provider = 'netease') {

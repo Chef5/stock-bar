@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { neteaseStockProvider } from './provider';
+import { neteaseStockProvider } from './providers/netease/provider';
 import { render } from './render';
 import timer from './timer';
 import StandardStock from './standardStock';
