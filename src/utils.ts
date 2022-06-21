@@ -1,6 +1,4 @@
 import StandardStock from './standardStock';
-import Stock from './stock';
-import { StockVariableName } from './stock-bar';
 
 export const keepDecimal = (num: number, fixed: number) => {
 	const result = parseFloat(String(num));
@@ -100,4 +98,34 @@ export const templateReplace = (
 		);
 	}
 	return '';
+};
+
+/**
+ * @description 向前填充字符
+ * @param {number | string} val 源字符串
+ * @param {number} len 长度
+ * @param {string} char 字符
+ * @returns
+ */
+export const padStart = (val: number | string, len = 2, char = '0'): string => {
+	return String(val).padStart(len, char);
+};
+
+/**
+ * @description 向后填充字符
+ * @param {number | string} val 源字符串
+ * @param {number} len 长度
+ * @param {string} char 字符
+ * @returns
+ */
+export const padEnd = (val: number | string, len = 2, char = '0'): string => {
+	return String(val).padEnd(len, char);
+};
+
+/**
+ * @description 获取今天日期
+ */
+export const getToday = () => {
+	const dt = new Date();
+	return `${padStart(dt.getMonth() + 1)}月${padStart(dt.getDate())}日`;
 };

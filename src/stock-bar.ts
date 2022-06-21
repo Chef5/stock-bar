@@ -17,7 +17,12 @@ export enum StockVariableName {
 	status = 'status', // 状态
 	symbol = 'symbol', // 标识
 	name = 'name', // 名称
+
 	alias = 'alias', // 昵称
+	barTemplate = 'barTemplate', // 状态栏模板
+	tooltipTemplate = 'tooltipTemplate', // 详情模板
+	color = 'color', // 颜色
+	day = 'day', // 日期 mm月dd日
 
 	percent = 'percent', // 百分
 	high = 'high', // 最高价
@@ -29,7 +34,7 @@ export enum StockVariableName {
 	arrow = 'arrow↓', // 箭头
 	yestclose = 'yestclose', // 昨收
 
-	askvol5 = 'askvol5', // 卖5  Math.ceil(n/100)=手
+	askvol5 = 'askvol5', // 卖5 手
 	askvol4 = 'askvol4', // 卖4
 	askvol3 = 'askvol3', // 卖3
 	askvol2 = 'askvol2', // 卖2

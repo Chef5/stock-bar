@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
+import Transformer from './transformer';
 
 /**
  * 网易股票查询接口
@@ -25,7 +26,7 @@ class NeteaseStockProvider {
 				if (!result[item].code) {
 					result[item].code = item; //兼容港股美股
 				}
-				return result[item];
+				return Transformer.transformNetease(result[item]);
 			});
 		} catch (err: unknown) {
 			const error = err as AxiosError;

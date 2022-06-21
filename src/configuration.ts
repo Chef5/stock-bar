@@ -30,11 +30,11 @@ export default class Configuration {
 	}
 
 	static getRiseColor() {
-		return Configuration.stockBarConfig().get('riseColor');
+		return Configuration.stockBarConfig().get('riseColor') as string;
 	}
 
 	static getFallColor() {
-		return Configuration.stockBarConfig().get('fallColor');
+		return Configuration.stockBarConfig().get('fallColor') as string;
 	}
 
 	static getBarTemplate() {

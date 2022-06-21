@@ -4,26 +4,28 @@ import Configuration from './configuration';
 import { neteaseStockProvider } from './provider';
 import { render } from './render';
 import timer from './timer';
-import Stock from './stock';
+import StandardStock from './standardStock';
 
-function loadChoiceStocks() {
+const loadChoiceStocks = () => {
 	return Configuration.getStocks().map((v) => {
 		if (typeof v === 'string') {
-			return new Stock(v);
+			return new StandardStock({
+				code: v,
+			});
 		}
 		if (typeof v === 'object') {
-			return new Stock(
-				v.code,
-				v.alias || '',
-				v.barTemplate || '',
-				v.tooltipTemplate || '',
-			);
+			return new StandardStock({
+				code: v.code,
+				alias: v.alias || '',
+				barTemplate: v.barTemplate || '',
+				tooltipTemplate: v.tooltipTemplate || '',
+			});
 		}
 		throw new Error(
-			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
+			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#插件配置',
 		);
 	});
-}
+};
 
 export function activate(context: vscode.ExtensionContext) {
 	let stocks = loadChoiceStocks();
@@ -45,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (!stock) {
 					continue;
 				}
-				stock.update(origin);
+				stock.renew(origin);
 			}
 			// 渲染内容
 			logger.debug('render');
