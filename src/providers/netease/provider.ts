@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
+import { Transformer } from '../../interfaces/transformer';
 import { NeteaseTransformer } from './transformer';
 
 /**
@@ -6,7 +7,7 @@ import { NeteaseTransformer } from './transformer';
  */
 export class NeteaseProvider {
 	private readonly httpService: AxiosInstance;
-	private readonly transformer: NeteaseTransformer
+	private readonly transformer: Transformer
 
 	constructor() {
 		this.httpService = axios.create({

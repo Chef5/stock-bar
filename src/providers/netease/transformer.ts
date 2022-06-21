@@ -1,8 +1,9 @@
 import Configuration from '../../configuration';
+import { Transformer } from '../../interfaces/transformer';
 import StandardStock from '../../standardStock';
 import { calcFixedNumber, calcVolume, getToday, keepDecimal } from '../../utils';
 
-export class NeteaseTransformer {
+export class NeteaseTransformer implements Transformer {
 	/**
 	 * @description 网易 -> 标准股票
 	 * @param data 网易数据
