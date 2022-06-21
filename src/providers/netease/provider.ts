@@ -1,17 +1,19 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import Transformer from './transformer';
+import { NeteaseTransformer } from './transformer';
 
 /**
  * 网易股票查询接口
  */
-class NeteaseStockProvider {
-	httpService: AxiosInstance;
+export class NeteaseProvider {
+	private readonly httpService: AxiosInstance;
+	private readonly transformer: NeteaseTransformer
 
 	constructor() {
 		this.httpService = axios.create({
 			timeout: 10000,
 			baseURL: 'https://api.money.126.net/data/feed',
 		});
+		this.transformer = new NeteaseTransformer()
 	}
 
 	/**
@@ -26,7 +28,7 @@ class NeteaseStockProvider {
 				if (!result[item].code) {
 					result[item].code = item; //兼容港股美股
 				}
-				return Transformer.transformNetease(result[item]);
+				return this.transformer.transform(result[item]);
 			});
 		} catch (err: unknown) {
 			const error = err as AxiosError;
@@ -43,5 +45,3 @@ class NeteaseStockProvider {
 		}
 	}
 }
-
-export const neteaseStockProvider = new NeteaseStockProvider();

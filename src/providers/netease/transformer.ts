@@ -2,28 +2,7 @@ import Configuration from '../../configuration';
 import StandardStock from '../../standardStock';
 import { calcFixedNumber, calcVolume, getToday, keepDecimal } from '../../utils';
 
-export default class Transformer {
-	static getStandardStock(data: Record<string, any>, provider = 'netease') {
-		if (!data) {
-			throw new Error('数据装换器：源数据错误');
-		}
-		try {
-			const standardStock = new StandardStock({});
-			switch (provider) {
-				case 'netease':
-					return this.transformNetease(data, standardStock);
-				case 'sina':
-					return standardStock;
-				case 'tencent':
-					return standardStock;
-				case 'xueqiu':
-					return standardStock;
-			}
-		} catch (error) {
-			throw new Error(`数据装换器：${error}`);
-		}
-	}
-
+export class NeteaseTransformer {
 	/**
 	 * @description 网易 -> 标准股票
 	 * @param data 网易数据
@@ -31,7 +10,7 @@ export default class Transformer {
 	 * @returns {StandardStock} 标准股票
 	 * @memberof Transformer
 	 */
-	static transformNetease(
+	 transform(
 		data: Record<string, any>,
 		stock?: StandardStock,
 	): StandardStock {
@@ -86,7 +65,7 @@ export default class Transformer {
 	 * @param {number} percent 百分比
 	 * @memberof Transformer
 	 */
-	static calculateColor(percent: number) {
+	calculateColor(percent: number) {
 		return percent >= 0
 			? Configuration.getRiseColor()
 			: Configuration.getFallColor();
@@ -97,7 +76,7 @@ export default class Transformer {
 	 * @param {number} percent 百分比
 	 * @memberof Transformer
 	 */
-	static calculatePercent(percent: number) {
+	calculatePercent(percent: number) {
 		return keepDecimal(percent * 100, 2);
 	}
 
@@ -107,7 +86,7 @@ export default class Transformer {
 	 * @param {StandardStock} stock 股票数据
 	 * @memberof Transformer
 	 */
-	static calculatePrice(price: number, stock: StandardStock) {
+	calculatePrice(price: number, stock: StandardStock) {
 		return keepDecimal(Number(price), calcFixedNumber(stock));
 	}
 
@@ -116,7 +95,7 @@ export default class Transformer {
 	 * @param {number} vol 量
 	 * @memberof Transformer
 	 */
-	static calculateVolume(vol: number) {
+	calculateVolume(vol: number) {
 		return calcVolume(vol);
 	}
 }
