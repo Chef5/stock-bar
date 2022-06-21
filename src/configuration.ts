@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { StockOptions } from './stock-bar';
+import { StockOptions } from './defined';
 
 export default class Configuration {
 	/**

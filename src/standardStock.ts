@@ -1,5 +1,5 @@
 import Configuration from './configuration';
-import { StockVariableName } from './stock-bar';
+import { StockVariableName } from './defined';
 
 import { codeConvert, templateReplace } from './utils';
 
