@@ -1,11 +1,13 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { Transformer } from '../../interfaces/transformer';
+import type { Provider } from '../../interfaces/provider';
+import { StockQuote } from '../../interfaces/stockQuote';
+import type { Transformer } from '../../interfaces/transformer';
 import { NeteaseTransformer } from './transformer';
 
 /**
  * 网易股票查询接口
  */
-export class NeteaseProvider {
+export class NeteaseProvider implements Provider {
 	private readonly httpService: AxiosInstance;
 	private readonly transformer: Transformer
 
@@ -21,7 +23,7 @@ export class NeteaseProvider {
 	 *
 	 * @param codes
 	 */
-	async fetch(codes: string[]) {
+	async fetch(codes: string[]): Promise<StockQuote[]> {
 		try {
 			const rep = await this.httpService.get(`${codes.join(',')}?callback=a`);
 			const result = JSON.parse(rep.data.slice(2, -2));

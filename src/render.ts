@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import StandardStock from './standardStock';
+import { StockQuote } from './interfaces/stockQuote';
 
 const stockHub = new Map();
 
@@ -8,7 +8,7 @@ const stockHub = new Map();
  * @param {StandardStock[]} stocks
  * @returns
  */
-export const render = (stocks: StandardStock[]) => {
+export const render = (stocks: StockQuote[]) => {
 	// 移除 配置更新后被删除的股票
 	const deleted = Array.from(stockHub.keys()).filter(
 		(code) => !(code in stocks),

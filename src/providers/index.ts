@@ -1,3 +1,2 @@
-import {  NeteaseProvider } from './netease/provider';
-
-export const neteaseProvider = new NeteaseProvider();
+export { NeteaseProvider } from './netease/provider';
+export { NeteaseStockQuote } from './netease/stockQuote';

@@ -1,6 +1,7 @@
 import Configuration from '../../configuration';
-import { Transformer } from '../../interfaces/transformer';
-import StandardStock from '../../standardStock';
+import type { Transformer } from '../../interfaces/transformer';
+import type { StockQuote } from '../../interfaces/stockQuote';
+import { NeteaseStockQuote } from './stockQuote';
 import { calcFixedNumber, calcVolume, getToday, keepDecimal } from '../../utils';
 
 export class NeteaseTransformer implements Transformer {
@@ -8,14 +9,11 @@ export class NeteaseTransformer implements Transformer {
 	 * @description 网易 -> 标准股票
 	 * @param data 网易数据
 	 * @param stock 标准股票
-	 * @returns {StandardStock} 标准股票
-	 * @memberof Transformer
+	 * @returns {NeteaseStockQuote} 标准股票
+	 * @memberof NeteaseTransformer
 	 */
-	 transform(
-		data: Record<string, any>,
-		stock?: StandardStock,
-	): StandardStock {
-		const standardStock = stock || new StandardStock({});
+	 transform(data: Record<string, any>): StockQuote {
+		const standardStock = new NeteaseStockQuote({});
 		// 挨个转换数据
 		standardStock.code = data.code;
 		standardStock.type = data.type;
@@ -64,7 +62,7 @@ export class NeteaseTransformer implements Transformer {
 	/**
 	 * @description 计算颜色
 	 * @param {number} percent 百分比
-	 * @memberof Transformer
+	 * @memberof NeteaseTransformer
 	 */
 	calculateColor(percent: number) {
 		return percent >= 0
@@ -84,17 +82,17 @@ export class NeteaseTransformer implements Transformer {
 	/**
 	 * @description 计算价格，保留2位小数 xx.xx
 	 * @param {number} price 价格
-	 * @param {StandardStock} stock 股票数据
-	 * @memberof Transformer
+	 * @param {NeteaseStockQuote} stock 股票数据
+	 * @memberof NeteaseTransformer
 	 */
-	calculatePrice(price: number, stock: StandardStock) {
+	calculatePrice(price: number, stock: NeteaseStockQuote) {
 		return keepDecimal(Number(price), calcFixedNumber(stock));
 	}
 
 	/**
 	 * @description 计算手数
 	 * @param {number} vol 量
-	 * @memberof Transformer
+	 * @memberof NeteaseTransformer
 	 */
 	calculateVolume(vol: number) {
 		return calcVolume(vol);

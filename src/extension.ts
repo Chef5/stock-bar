@@ -1,20 +1,19 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { neteaseProvider } from './providers';
+import { NeteaseProvider, NeteaseStockQuote } from './providers';
 import { render } from './render';
 import timer from './timer';
-import StandardStock from './standardStock';
 
 const loadChoiceStocks = () => {
 	return Configuration.getStocks().map((v) => {
 		if (typeof v === 'string') {
-			return new StandardStock({
+			return new NeteaseStockQuote({
 				code: v,
 			});
 		}
 		if (typeof v === 'object') {
-			return new StandardStock({
+			return new NeteaseStockQuote({
 				code: v.code,
 				alias: v.alias || '',
 				barTemplate: v.barTemplate || '',
@@ -36,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 	);
 
+	const neteaseProvider = new NeteaseProvider();
 	const task: () => any = async () => {
 		try {
 			// 从云端获取最新状态
