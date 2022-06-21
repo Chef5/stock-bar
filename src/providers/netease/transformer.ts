@@ -2,7 +2,12 @@ import Configuration from '../../configuration';
 import type { Transformer } from '../../interfaces/transformer';
 import type { StockQuote } from '../../interfaces/stockQuote';
 import { NeteaseStockQuote } from './stockQuote';
-import { calcFixedNumber, calcVolume, getToday, keepDecimal } from '../../utils';
+import {
+	calcFixedNumber,
+	calcVolume,
+	getToday,
+	keepDecimal,
+} from '../../utils';
 
 export class NeteaseTransformer implements Transformer {
 	/**
@@ -12,7 +17,7 @@ export class NeteaseTransformer implements Transformer {
 	 * @returns {NeteaseStockQuote} 标准股票
 	 * @memberof NeteaseTransformer
 	 */
-	 transform(data: Record<string, any>): StockQuote {
+	transform(data: Record<string, any>): StockQuote {
 		const standardStock = new NeteaseStockQuote({});
 		// 挨个转换数据
 		standardStock.code = data.code;

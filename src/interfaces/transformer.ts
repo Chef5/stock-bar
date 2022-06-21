@@ -1,5 +1,5 @@
-import { StockQuote } from "./stockQuote";
+import { StockQuote } from './stockQuote';
 
 export interface Transformer {
-    transform(data: Record<string, any>): StockQuote;
+	transform(data: Record<string, any>): StockQuote;
 }

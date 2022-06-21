@@ -9,14 +9,14 @@ import { NeteaseTransformer } from './transformer';
  */
 export class NeteaseProvider implements Provider {
 	private readonly httpService: AxiosInstance;
-	private readonly transformer: Transformer
+	private readonly transformer: Transformer;
 
 	constructor() {
 		this.httpService = axios.create({
 			timeout: 10000,
 			baseURL: 'https://api.money.126.net/data/feed',
 		});
-		this.transformer = new NeteaseTransformer()
+		this.transformer = new NeteaseTransformer();
 	}
 
 	/**

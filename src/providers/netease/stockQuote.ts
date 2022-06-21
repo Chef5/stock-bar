@@ -4,9 +4,8 @@ import { codeConvert, templateReplace } from '../../utils';
 import { StockQuote } from '../../interfaces/stockQuote';
 
 export class NeteaseStockQuote extends StockQuote {
-
 	constructor(stock: Record<string, any>) {
-		super()
+		super();
 		Object.entries(stock).forEach(([key, val]) => {
 			if (key === 'code') {
 				this.code = codeConvert(val);
