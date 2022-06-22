@@ -1,41 +1,24 @@
-import Configuration from './configuration';
-import StandardStock from './standardStock';
-import { calcFixedNumber, calcVolume, getToday, keepDecimal } from './utils';
+import Configuration from '../../configuration';
+import type { Transformer } from '../../interfaces/transformer';
+import type { StockQuote } from '../../interfaces/stockQuote';
+import { NeteaseStockQuote } from './stockQuote';
+import {
+	calcFixedNumber,
+	calcVolume,
+	getToday,
+	keepDecimal,
+} from '../../utils';
 
-export default class Transformer {
-	static getStandardStock(data: Record<string, any>, provider = 'netease') {
-		if (!data) {
-			throw new Error('数据装换器：源数据错误');
-		}
-		try {
-			const standardStock = new StandardStock({});
-			switch (provider) {
-				case 'netease':
-					return this.transformNetease(data, standardStock);
-				case 'sina':
-					return standardStock;
-				case 'tencent':
-					return standardStock;
-				case 'xueqiu':
-					return standardStock;
-			}
-		} catch (error) {
-			throw new Error(`数据装换器：${error}`);
-		}
-	}
-
+export class NeteaseTransformer implements Transformer {
 	/**
 	 * @description 网易 -> 标准股票
 	 * @param data 网易数据
 	 * @param stock 标准股票
-	 * @returns {StandardStock} 标准股票
-	 * @memberof Transformer
+	 * @returns {NeteaseStockQuote} 标准股票
+	 * @memberof NeteaseTransformer
 	 */
-	static transformNetease(
-		data: Record<string, any>,
-		stock?: StandardStock,
-	): StandardStock {
-		const standardStock = stock || new StandardStock({});
+	transform(data: Record<string, any>): StockQuote {
+		const standardStock = new NeteaseStockQuote({});
 		// 挨个转换数据
 		standardStock.code = data.code;
 		standardStock.type = data.type;
@@ -84,9 +67,9 @@ export default class Transformer {
 	/**
 	 * @description 计算颜色
 	 * @param {number} percent 百分比
-	 * @memberof Transformer
+	 * @memberof NeteaseTransformer
 	 */
-	static calculateColor(percent: number) {
+	calculateColor(percent: number) {
 		return percent >= 0
 			? Configuration.getRiseColor()
 			: Configuration.getFallColor();
@@ -97,26 +80,26 @@ export default class Transformer {
 	 * @param {number} percent 百分比
 	 * @memberof Transformer
 	 */
-	static calculatePercent(percent: number) {
+	calculatePercent(percent: number) {
 		return keepDecimal(percent * 100, 2);
 	}
 
 	/**
 	 * @description 计算价格，保留2位小数 xx.xx
 	 * @param {number} price 价格
-	 * @param {StandardStock} stock 股票数据
-	 * @memberof Transformer
+	 * @param {NeteaseStockQuote} stock 股票数据
+	 * @memberof NeteaseTransformer
 	 */
-	static calculatePrice(price: number, stock: StandardStock) {
+	calculatePrice(price: number, stock: NeteaseStockQuote) {
 		return keepDecimal(Number(price), calcFixedNumber(stock));
 	}
 
 	/**
 	 * @description 计算手数
 	 * @param {number} vol 量
-	 * @memberof Transformer
+	 * @memberof NeteaseTransformer
 	 */
-	static calculateVolume(vol: number) {
+	calculateVolume(vol: number) {
 		return calcVolume(vol);
 	}
 }

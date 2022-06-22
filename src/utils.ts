@@ -1,4 +1,4 @@
-import StandardStock from './standardStock';
+import { StockQuote } from './interfaces/stockQuote';
 
 export const keepDecimal = (num: number, fixed: number) => {
 	const result = parseFloat(String(num));
@@ -8,7 +8,7 @@ export const keepDecimal = (num: number, fixed: number) => {
 	return result.toFixed(fixed);
 };
 
-export const calcFixedNumber = (item: StandardStock) => {
+export const calcFixedNumber = (item: StockQuote) => {
 	const high =
 		String(item.high).indexOf('.') === -1
 			? 0

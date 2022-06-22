@@ -1,20 +1,19 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { neteaseStockProvider } from './provider';
+import { NeteaseProvider, NeteaseStockQuote } from './providers';
 import { render } from './render';
 import timer from './timer';
-import StandardStock from './standardStock';
 
 const loadChoiceStocks = () => {
 	return Configuration.getStocks().map((v) => {
 		if (typeof v === 'string') {
-			return new StandardStock({
+			return new NeteaseStockQuote({
 				code: v,
 			});
 		}
 		if (typeof v === 'object') {
-			return new StandardStock({
+			return new NeteaseStockQuote({
 				code: v.code,
 				alias: v.alias || '',
 				barTemplate: v.barTemplate || '',
@@ -36,11 +35,12 @@ export function activate(context: vscode.ExtensionContext) {
 		}),
 	);
 
+	const neteaseProvider = new NeteaseProvider();
 	const task: () => any = async () => {
 		try {
 			// 从云端获取最新状态
 			logger.debug('call fetchData');
-			const data = await neteaseStockProvider.fetch(stocks.map((v) => v.code));
+			const data = await neteaseProvider.fetch(stocks.map((v) => v.code));
 			// 更新本地的数据
 			for (const origin of data) {
 				const stock = stocks.find((v) => v.code === origin.code);

@@ -1,24 +1,29 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import Transformer from './transformer';
+import type { Provider } from '../../interfaces/provider';
+import { StockQuote } from '../../interfaces/stockQuote';
+import type { Transformer } from '../../interfaces/transformer';
+import { NeteaseTransformer } from './transformer';
 
 /**
  * 网易股票查询接口
  */
-class NeteaseStockProvider {
-	httpService: AxiosInstance;
+export class NeteaseProvider implements Provider {
+	private readonly httpService: AxiosInstance;
+	private readonly transformer: Transformer;
 
 	constructor() {
 		this.httpService = axios.create({
 			timeout: 10000,
 			baseURL: 'https://api.money.126.net/data/feed',
 		});
+		this.transformer = new NeteaseTransformer();
 	}
 
 	/**
 	 *
 	 * @param codes
 	 */
-	async fetch(codes: string[]) {
+	async fetch(codes: string[]): Promise<StockQuote[]> {
 		try {
 			const rep = await this.httpService.get(`${codes.join(',')}?callback=a`);
 			const result = JSON.parse(rep.data.slice(2, -2));
@@ -26,7 +31,7 @@ class NeteaseStockProvider {
 				if (!result[item].code) {
 					result[item].code = item; //兼容港股美股
 				}
-				return Transformer.transformNetease(result[item]);
+				return this.transformer.transform(result[item]);
 			});
 		} catch (err: unknown) {
 			const error = err as AxiosError;
@@ -43,5 +48,3 @@ class NeteaseStockProvider {
 		}
 	}
 }
-
-export const neteaseStockProvider = new NeteaseStockProvider();
