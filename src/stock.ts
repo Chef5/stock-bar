@@ -1,5 +1,3 @@
-import { codeConvert } from './utils';
-
 export default class Stock {
 	code: string;
 	symbol: string;
@@ -14,7 +12,7 @@ export default class Stock {
 	yestclose = 0;
 
 	constructor(code: string, alias?: string | undefined) {
-		this.code = codeConvert(code);
+		this.code = code;
 		this.symbol = code;
 		this.name = null;
 		this.alias = alias ?? '';
