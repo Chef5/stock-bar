@@ -37,28 +37,3 @@ export const calcFixedNumber = (item: Stock) => {
 
 	return max;
 };
-
-/**
- * 股票代码转换器，(网易接口需要该格式的代码)
- * 转换之后 0 开头为上海市场 1开头为深圳市场
- * us_xxxx => us_xxxx
- * hkxxxx  => hkxxxx
- * szxxxx  => 1xxxxx
- * shxxxx  => 0xxxxx
- * 6xxxxx  => 0xxxxx
- * 0xxxxx  => 1xxxxx
- * @param {string} code
- * @returns
- */
-export const codeConvert = (code: string) => {
-	if (isNaN(Number(code[0]))) {
-		if (code.toLowerCase().indexOf('us_') > -1) {
-			return code.toUpperCase();
-		}
-		if (code.indexOf('hk') > -1) {
-			return code;
-		}
-		return code.toLowerCase().replace('sz', '1').replace('sh', '0');
-	}
-	return (code[0] === '6' ? '0' : '1') + code;
-};

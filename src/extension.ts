@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { neteaseStockProvider } from './provider';
+import { sinaStockProvider } from './provider';
 import { render } from './render';
 import timer from './timer';
 import Stock from './stock';
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 		try {
 			// 从云端获取最新状态
 			logger.debug('call fetchData');
-			const data = await neteaseStockProvider.fetch(stocks.map((v) => v.code));
+			const data = await sinaStockProvider.fetch(stocks.map((v) => v.code));
 			// 更新本地的数据
 			for (const origin of data) {
 				const stock = stocks.find((v) => v.code === origin.code);
