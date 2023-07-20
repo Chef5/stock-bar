@@ -80,4 +80,4 @@ VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
 > 插件源：`Stock Bar`最初Fork自[stock-watch](https://github.com/TDGarden/stock-watch)，现在已对其进行了重大重构。
 
 > 股票数据来源：
->  - 网易
+>  - 新浪

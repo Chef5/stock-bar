@@ -151,7 +151,7 @@ class SinaStockTransform {
 }
 
 /**
- * 网易股票查询接口
+ * 新浪股票查询接口
  */
 class SinaStockProvider {
 	httpService: AxiosInstance;
