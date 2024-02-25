@@ -27,6 +27,8 @@ class SinaStockTransform {
 				return String(this.params[1] || '---');
 			case 'us':
 				return String(this.params[0] || '---');
+			case 'bj':
+				return String(this.params[0] || '---');
 			default:
 				return '---';
 		}
@@ -45,6 +47,8 @@ class SinaStockTransform {
 				return Number(this.params[6] || 0);
 			case 'us':
 				return Number(this.params[1] || 0);
+			case 'bj':
+				return Number(this.params[3] || 0);
 			default:
 				return 0;
 		}
@@ -63,6 +67,8 @@ class SinaStockTransform {
 				return Number(this.params[5] || 0);
 			case 'us':
 				return Number(this.params[7] || 0);
+			case 'bj':
+				return Number(this.params[5] || 0);
 			default:
 				return 0;
 		}
@@ -81,6 +87,8 @@ class SinaStockTransform {
 				return Number(this.params[4] || 0);
 			case 'us':
 				return Number(this.params[6] || 0);
+			case 'bj':
+				return Number(this.params[4] || 0);
 			default:
 				return 0;
 		}
@@ -99,6 +107,8 @@ class SinaStockTransform {
 				return Number(this.params[3] || 0);
 			case 'us':
 				return Number(this.params[26] || 0);
+			case 'bj':
+				return Number(this.params[2] || 0);
 			default:
 				return 0;
 		}
