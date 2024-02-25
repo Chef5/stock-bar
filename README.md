@@ -69,6 +69,9 @@ VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
   <a href="https://github.com/arrebole">
 		<img src="https://github.com/arrebole.png?size=100" width="100" height="100" style="border-radius: 50%;" />
 	</a>
+  <a href="https://github.com/Liudon">
+		<img src="https://github.com/Liudon.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+	</a>
 </p>
 
 ## 版本许可
