@@ -25,7 +25,7 @@ let timer = null;
 let stocks: Stock[];
 
 function restart() {
-	console.log('restart');
+	//console.log('restart');
 	const interval = Configuration.getUpdateInterval();
 	if (timer) {
 		clearInterval(timer);
@@ -66,7 +66,7 @@ async function ticker() {
 }
 
 function stop() {
-	console.log('stop');
+	//console.log('stop');
 	if (timer) {
 		clearInterval(timer);
 		timer = null;
@@ -75,7 +75,7 @@ function stop() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('activivate');
+	//console.log('activivate');
 	stocks = loadChoiceStocks();
 
 	const startCmd = vscode.commands.registerCommand('stockbar.start', restart);
