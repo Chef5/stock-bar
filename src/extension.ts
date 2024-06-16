@@ -3,7 +3,6 @@ import logger from './logger';
 import Configuration from './configuration';
 import { sinaStockProvider } from './provider';
 import { render, renderFutures, stopAllRender } from './render';
-import timer from './timer';
 import Stock from './stock';
 import FutureHandler from './futures';
 import { clearInterval } from 'timers';
@@ -26,6 +25,7 @@ let timer = null;
 let stocks: Stock[];
 
 function restart() {
+	console.log('restart');
 	const interval = Configuration.getUpdateInterval();
 	if (timer) {
 		clearInterval(timer);
@@ -66,6 +66,7 @@ async function ticker() {
 }
 
 function stop() {
+	console.log('stop');
 	if (timer) {
 		clearInterval(timer);
 		timer = null;
@@ -74,6 +75,7 @@ function stop() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	console.log('activivate');
 	stocks = loadChoiceStocks();
 
 	const startCmd = vscode.commands.registerCommand('stockbar.start', restart);
