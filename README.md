@@ -10,6 +10,13 @@ VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
 
 插件已开源，开源地址：[Github](https://github.com/Chef5/stock-bar)，欢迎点星星 ⭐️、提 issue 或者 pr
 
+## 启动
+
+(ctrl + shift + P) 后运行命令：
+
+- stock watch start 开始显示
+- stock watch stop 关闭显示
+
 ## 插件配置
 
 修改用户配置，添加你所需要监控的股票代码
@@ -101,3 +108,4 @@ VScode 插件 | A 股 | 港股 | 实时股票数据 | 状态栏实时更新
 > 股票数据来源：
 >
 > - 新浪
+> - 同花顺
