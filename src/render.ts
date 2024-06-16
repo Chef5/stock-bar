@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 import Configuration from './configuration';
 import Stock from './stock';
 import { calcFixedNumber, keepDecimal } from './utils';
+import { FutureData } from './futures';
+import logger from './logger';
 
 const stockHub = new Map();
 
@@ -65,3 +67,92 @@ export const render = (stocks: any) => {
 		stockHub.get(code).barItem.tooltip = getTooltipText(stocks[code]);
 	}
 };
+
+let futureBars: vscode.StatusBarItem[] = [];
+
+export function stopAllRender() {
+	for (const [code, item] of stockHub) {
+		const barItem = item.barItem;
+		barItem.hide();
+		barItem.dispose();
+	}
+	stockHub.clear();
+
+	for (const item of futureBars) {
+		const barItem = item;
+		barItem.hide();
+		barItem.dispose();
+	}
+	futureBars = [];
+}
+
+function syncFutureBarItem(futures: FutureData[]) {
+	const addBars = futures.length - futureBars.length;
+	for (let i = 0; i < -addBars; i++) {
+		const barItem = futureBars[futureBars.length - 1];
+		barItem.dispose();
+		futureBars.pop();
+	}
+
+	for (let i = 0; i < addBars; i++) {
+		const barItem = vscode.window.createStatusBarItem(
+			vscode.StatusBarAlignment.Left,
+		);
+		barItem.show();
+		futureBars.push(barItem);
+	}
+}
+
+function formatFuture(item: FutureData) {
+	const itemName = item.alias || item.name || '';
+	let text = `${item.code} ---`;
+	const tooltip = new vscode.MarkdownString(`**${itemName}** ${item.code}\n\n`);
+
+	try {
+		if (!item.price) {
+			return {
+				text,
+				tooltip,
+			};
+		}
+
+		const percent = item.price.pre_price
+			? (item.price.current_price - item.price.pre_price) / item.price.pre_price
+			: 0;
+
+		const percentStr = `${keepDecimal(percent * 100, 2)}%`;
+		const balance = Math.round(
+			(item.price.current_price - item.hold_price) *
+				item.hold_number *
+				item.ratio,
+		);
+		tooltip.appendMarkdown(
+			`价格: **${item.price.current_price}** 涨跌: **${percentStr}**\n\n`,
+		);
+
+		const balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
+		if (item.hold_price && item.hold_number && item.ratio) {
+			text = `${item.code} ${item.price.current_price} ${balanceStr}`;
+			tooltip.appendMarkdown(`盈亏: **${balanceStr}**`);
+		} else {
+			text = `${item.code} ${item.price.current_price} ${percentStr}`;
+		}
+	} catch (err) {
+		logger.error('%O', err);
+	}
+
+	return {
+		text,
+		tooltip,
+	};
+}
+
+export function renderFutures(futures: FutureData[]) {
+	//logger.debug('renderFutures', futures);
+	syncFutureBarItem(futures);
+	for (const [index, barItem] of futureBars.entries()) {
+		const { text, tooltip } = formatFuture(futures[index]);
+		barItem.text = text;
+		barItem.tooltip = tooltip;
+	}
+}
