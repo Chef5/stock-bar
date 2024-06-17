@@ -12,7 +12,7 @@ stock=%5B%7B%22code%22%3A%22CU2409%22%2C%22market%22%3A%22ab%22%2C%22type%22%3A%
 
 
 ####
-GET https://d.10jqka.com.cn/v6/time/qh_SA2409/last.js
+GET https://d.10jqka.com.cn/v6/time/qh_FG2409/last.js
 Referer: https://goodsfu.10jqka.com.cn/
 Content-Type: application/json
 
@@ -21,4 +21,13 @@ Content-Type: application/json
 GET https://fupage.10jqka.com.cn/futgwapi/api/market/basis/v2/trend_data?contract=ag2408&spot_index_id=-1
 
 ### 
-GET https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=ag2408
+GET https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=sa9999
+
+###
+GET https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_165681&_=1718636839611
+Referer: https://www.cngold.org/
+
+###
+GET https://hq.sinajs.cn?list=nf_CU2408
+Referer: https://finance.sina.com.cn
+Content-Type: application/json

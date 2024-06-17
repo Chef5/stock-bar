@@ -16,13 +16,13 @@ class Provider {
 	async getBasicInfo(code: string) {
 		try {
 			const url = `https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code}`;
-			const ret = await this.instance.get(url);
-			const data = ret.data;
-			if (data.code) {
-				return null;
-			}
-			const name = data.data?.name || '';
-			const tradeUnit = (data.data?.trade_unit || '').trim();
+			const results = await Promise.all([
+				this.instance.get(`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toUpperCase()}`),
+				this.instance.get(`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toLowerCase()}`)
+			])
+			const data = results[0].data.data || results[1].data.data || {};
+			const name = data.name || '';
+			const tradeUnit = (data.trade_unit || '').trim();
 			let ratio = 0;
 			if (tradeUnit) {
 				const match = tradeUnit.match(/^\d*/);
@@ -41,7 +41,7 @@ class Provider {
 		}
 	}
 
-	async getLastestPrice(code: string) {
+	async getLatestPrice(code: string) {
 		try {
 			const headers = {
 				Referer: 'https://goodsfu.10jqka.com.cn/',
@@ -82,7 +82,41 @@ class Provider {
 	}
 }
 
-const provider = new Provider();
+class ProviderSina extends Provider {
+	async getLatestPrice(code: string) {
+		try {
+			const headers = {
+				Referer: 'https://finance.sina.com.cn',
+				'Content-Type': 'application/json',
+			};
+			const url = `https://hq.sinajs.cn?list=nf_${code}`;
+			let ret = (await this.instance.get(url, { headers, responseType:'arraybuffer'})).data;
+			ret = new TextDecoder('GBK').decode(ret);
+			const match = ret.match(/\"(.*)\"/);
+			if (!match) {
+				return null;
+			}
+			const arr = match[1].split(',');
+			if (arr.length <= 5) { return null; }
+			const name = arr[0];
+			const open = parseFloat(arr[2]);
+			const high = parseFloat(arr[3]);
+			const low = parseFloat(arr[4]);
+			const current_price = parseFloat(arr[8]);
+			const pre_price = parseFloat(arr[10]);
+			return {
+				name,
+				pre_price,
+				current_price,
+			};
+		} catch (err: unknown) {
+			logger.error('getLastestPrice error %O', err);
+			return null;
+		}
+	}
+}
+
+const provider = new ProviderSina();
 
 export class FutureData {
 	code: string;
@@ -115,6 +149,7 @@ export class FutureData {
 		}
 		this.init_times++;
 		const info = await provider.getBasicInfo(this.code);
+		console.log('updateConfig', info);
 		if (info) {
 			this.inited = true;
 			if (!this.name) {
@@ -130,7 +165,7 @@ export class FutureData {
 	}
 
 	async updatePrice() {
-		const info = await provider.getLastestPrice(this.code);
+		const info = await provider.getLatestPrice(this.code);
 		if (info) {
 			this.price = info;
 			this.name = info.name;
@@ -166,11 +201,13 @@ export default class FutureHandler {
 }
 
 async function testGetBasicInfo() {
-	const data = await provider.getBasicInfo('ag2408');
+	const data = await provider.getBasicInfo('cu2409');
 	console.log(data);
 }
 
 async function testGetPrice() {
-	const data = await provider.getLastestPrice('ag2408');
+	const data = await provider.getLatestPrice('CU2409');
 	console.log(data);
 }
+
+testGetBasicInfo();

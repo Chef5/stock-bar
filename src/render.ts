@@ -131,6 +131,7 @@ function formatFuture(item: FutureData) {
 		);
 
 		const balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
+		console.log(item);
 		if (item.hold_price && item.hold_number && item.ratio) {
 			text = `${item.code} ${item.price.current_price} ${balanceStr}`;
 			tooltip.appendMarkdown(`盈亏: **${balanceStr}**`);
