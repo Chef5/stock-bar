@@ -2,14 +2,16 @@ import Configuration from './configuration';
 
 class Timer {
 	async await() {
-		while (true) {
-			await this.sleep(Configuration.getUpdateInterval());
+		await this.sleep(Configuration.getUpdateInterval());
 
-			// 工作日工作时间 9:00-11.30 13:00-15:00
-			if (this.isWorkDay() && this.isWorkTime()) {
-				return true;
-			}
-		}
+		// while (true) {
+		// 	await this.sleep(Configuration.getUpdateInterval());
+
+		// 	//工作日工作时间 9:00-11.30 13:00-15:00
+		// 	if (this.isWorkDay() && this.isWorkTime()) {
+		// 		return true;
+		// 	}
+		// }
 	}
 
 	/**

@@ -17,7 +17,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"*"		
 	],
 	"main": "./dist/extension",
 	"contributes": {
@@ -33,6 +33,17 @@
 						}
 					],
 					"description": "股票代码数组，配置需要监控的股票代码，具体配置规则请查看插件详情页"
+				},
+				"stock-bar.futures": {
+					"type": "array",
+					"default": [	
+						{
+							"code": "sa9999",
+							"hold_price": 2300,
+							"hold_number": -1
+						}					
+					],
+					"description": "商品期货数组，配置需要监控的商品期货，具体配置规则请查看插件详情页"
 				},
 				"stock-bar.updateInterval": {
 					"type": "number",
@@ -50,7 +61,17 @@
 					"description": "股票跌的颜色，默认跟随系统"
 				}
 			}
-		}
+		},
+		"commands": [
+			{
+				"command": "stockbar.start",
+				"title": "stock watch start"
+			},
+			{
+				"command": "stockbar.stop",
+				"title": "stock watch stop"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
