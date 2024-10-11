@@ -135,7 +135,7 @@ class SinaStockTransform {
 	 * 涨跌价格
 	 */
 	get updown() {
-		return this.fixed(this.price - this.open);
+		return this.fixed(this.price - this.yestclose);
 	}
 
 	fixed(n: number, q = 2) {
