@@ -3,6 +3,8 @@ export default class Stock {
 	symbol: string;
 	name: string | null;
 	alias: string;
+	hold_price = 0;
+	hold_number = 0;
 	price = 0;
 	updown = 0;
 	percent = 0;
@@ -11,11 +13,18 @@ export default class Stock {
 	open = 0;
 	yestclose = 0;
 
-	constructor(code: string, alias?: string | undefined) {
+	constructor(
+		code: string,
+		alias?: string | undefined,
+		hold_price?: number | undefined,
+		hold_number?: number | undefined,
+	) {
 		this.code = code;
 		this.symbol = code;
 		this.name = null;
 		this.alias = alias ?? '';
+		this.hold_price = hold_price ?? 0;
+		this.hold_number = hold_number ?? 0;
 	}
 	update(origin: Stock) {
 		this.name = origin.name;

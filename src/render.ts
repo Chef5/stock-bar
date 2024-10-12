@@ -4,7 +4,6 @@ import Configuration from './configuration';
 import Stock from './stock';
 import { calcFixedNumber, keepDecimal } from './utils';
 import { FutureData } from './futures';
-import logger from './logger';
 
 const stockHub = new Map();
 
@@ -24,12 +23,21 @@ function getItemText(item: Stock) {
 }
 
 function getTooltipText(item: Stock) {
-	return (
-		`【${item.name}】今日行情\n` +
-		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%\n` +
-		`最高：${item.high}   最低：${item.low}\n` +
-		`今开：${item.open}   昨收：${item.yestclose}`
-	);
+	const hasHold = item.hold_price && item.hold_number;
+	const tooltips = [
+		`【${item.name}】今日行情`,
+		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%`,
+		`最高：${item.high}   最低：${item.low}`,
+		`今开：${item.open}   昨收：${item.yestclose}`,
+	];
+	if (hasHold) {
+		const balance = Math.round(
+			(item.price - item.hold_price) * item.hold_number,
+		);
+		const balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
+		tooltips.push(`盈亏：${balanceStr}`);
+	}
+	return tooltips.join('\n');
 }
 
 /**
@@ -104,52 +112,45 @@ function syncFutureBarItem(futures: FutureData[]) {
 }
 
 function formatFuture(item: FutureData) {
-	const itemName = item.alias || item.name || '';
-	let text = `${item.code} ---`;
-	const tooltip = new vscode.MarkdownString(`**${itemName}** ${item.code}\n\n`);
-
-	try {
-		if (!item.price) {
-			return {
-				text,
-				tooltip,
-			};
-		}
-
+	let percentStr = '-';
+	let balanceStr = '-';
+	const hasHold = item.hold_price && item.hold_number && item.ratio;
+	if (item.price) {
 		const percent = item.price.pre_price
 			? (item.price.current_price - item.price.pre_price) / item.price.pre_price
 			: 0;
-
-		const percentStr = `${keepDecimal(percent * 100, 2)}%`;
-		const balance = Math.round(
-			(item.price.current_price - item.hold_price) *
-				item.hold_number *
-				item.ratio,
-		);
-		tooltip.appendMarkdown(
-			`价格: **${item.price.current_price}** 涨跌: **${percentStr}**\n\n`,
-		);
-
-		const balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
-		console.log(item);
-		if (item.hold_price && item.hold_number && item.ratio) {
-			text = `${item.code} ${item.price.current_price} ${balanceStr}`;
-			tooltip.appendMarkdown(`盈亏: **${balanceStr}**`);
-		} else {
-			text = `${item.code} ${item.price.current_price} ${percentStr}`;
+		percentStr = `${keepDecimal(percent * 100, 2)}`;
+		if (hasHold) {
+			const balance = Math.round(
+				(item.price.current_price - item.hold_price) *
+					item.hold_number *
+					item.ratio,
+			);
+			balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
 		}
-	} catch (err) {
-		logger.error('%O', err);
+	}
+
+	const text = `${item.alias ?? item.name ?? item.code} ${
+		item.price?.current_price ?? '-'
+	} ${percentStr}%`;
+
+	const tooltips = [
+		`【${item.name}】今日行情`,
+		`涨跌：${item.price?.updown}   百分：${percentStr}%`,
+		`最高：${item.price?.high}   最低：${item.price?.low}`,
+		`今开：${item.price?.open}   昨收：${item.price?.pre_price}`,
+	];
+	if (hasHold) {
+		tooltips.push(`盈亏：${balanceStr}`);
 	}
 
 	return {
 		text,
-		tooltip,
+		tooltip: tooltips.join('\n'),
 	};
 }
 
 export function renderFutures(futures: FutureData[]) {
-	//logger.debug('renderFutures', futures);
 	syncFutureBarItem(futures);
 	for (const [index, barItem] of futureBars.entries()) {
 		const { text, tooltip } = formatFuture(futures[index]);

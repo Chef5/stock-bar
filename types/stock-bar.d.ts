@@ -2,6 +2,8 @@ declare module 'stock-bar' {
 	export interface StockOption {
 		code: string;
 		alias: string;
+		hold_price?: number;
+		hold_number?: number;
 	}
 	type color = string;
 
