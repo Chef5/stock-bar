@@ -2,9 +2,9 @@
 
 VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时更新
 
-`Stock Bar`会在开盘期间自动刷新股票数据，并在 VScode 底部状态栏显示股票基本数据，让你在使用 VScode 期间能随时关注到你的股票。
+`Stock Bar` 会在开盘期间自动刷新股票数据，并在 VScode 底部状态栏显示股票基本数据，让你在使用 VScode 期间能随时关注到你的股票。
 
-为了隐秘性，`Stock Bar`默认只会显示股价、百分点这样的纯数字，当你将鼠标移上去就可以查看详情。当然为了区分，也可以自定义显示股票的名称
+为了隐秘性，`Stock Bar` 默认只会显示股价、百分点这样的纯数字，当你将鼠标移上去就可以查看详情。当然为了区分，也可以自定义显示股票的名称
 
 ![image](https://raw.githubusercontent.com/Chef5/stock-bar/main/stock-bar-plugin.png)
 
@@ -28,8 +28,8 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
   {
     "code": "sz000001", // 也可以添加详细配置
     "alias":  "平安",
-		"hold_price": 0,
-		"hold_number": 0
+    "hold_price": 0,
+    "hold_number": 0
   }
 ],
 
@@ -96,18 +96,21 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
 
 ## 贡献者
 
-感谢这些可爱的贡献者参与开发和维护 Stock Bar，让`Stock Bar`更加完美！
+感谢这些可爱的贡献者参与开发和维护 Stock Bar，让 `Stock Bar` 更加完美！
 
 <p>
   <a href="https://github.com/arrebole">
-		<img src="https://github.com/arrebole.png?size=100" width="100" height="100" style="border-radius: 50%;" />
-	</a>
+    <img src="https://github.com/arrebole.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
   <a href="https://github.com/Liudon">
-		<img src="https://github.com/Liudon.png?size=100" width="100" height="100" style="border-radius: 50%;" />
-	</a>
+    <img src="https://github.com/Liudon.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
   <a href="https://github.com/weibobo">
-		<img src="https://github.com/weibobo.png?size=100" width="100" height="100" style="border-radius: 50%;" />
-	</a>
+    <img src="https://github.com/weibobo.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
+  <a href="https://github.com/Chef5">
+    <img src="https://github.com/Chef5.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
 </p>
 
 ## 版本许可
