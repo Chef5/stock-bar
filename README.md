@@ -108,8 +108,8 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
   <a href="https://github.com/weibobo">
     <img src="https://github.com/weibobo.png?size=100" width="100" height="100" style="border-radius: 50%;" />
   </a>
-  <a href="https://github.com/Chef5">
-    <img src="https://github.com/Chef5.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  <a href="https://github.com/boweipacer">
+    <img src="https://github.com/boweipacer.png?size=100" width="100" height="100" style="border-radius: 50%;" />
   </a>
 </p>
 
