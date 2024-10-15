@@ -2,9 +2,10 @@ import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
 import { sinaStockProvider } from './provider';
-import { render } from './render';
-import timer from './timer';
+import { render, renderFutures, stopAllRender } from './render';
 import Stock from './stock';
+import FutureHandler from './futures';
+import { clearInterval } from 'timers';
 
 function loadChoiceStocks() {
 	return Configuration.getStocks().map((v) => {
@@ -20,45 +21,75 @@ function loadChoiceStocks() {
 	});
 }
 
+let timer = null;
+let stocks: Stock[];
+
+function restart() {
+	//console.log('restart');
+	const interval = Configuration.getUpdateInterval();
+	if (timer) {
+		clearInterval(timer);
+		timer = null;
+	}
+	stocks = loadChoiceStocks();
+	futureHandler.updateConfig(Configuration.getFutures());
+
+	timer = setInterval(ticker, interval);
+	ticker();
+}
+
+const futureHandler = new FutureHandler();
+
+async function ticker() {
+	try {
+		// 从云端获取最新状态
+		logger.debug('call fetchData');
+		const [data, _] = await Promise.all([
+			sinaStockProvider.fetch(stocks.map((v) => v.code)),
+			futureHandler.updateData(),
+		]);
+		// 更新本地的数据
+		for (const origin of data) {
+			const stock = stocks.find((v) => v.code === origin.code);
+			if (!stock) {
+				continue;
+			}
+			stock.update(origin);
+		}
+		// 渲染内容
+		logger.debug('render');
+		render(stocks);
+		renderFutures(futureHandler.futures);
+	} catch (e) {
+		logger.error('%O', e);
+	}
+}
+
+function stop() {
+	//console.log('stop');
+	if (timer) {
+		clearInterval(timer);
+		timer = null;
+	}
+	stopAllRender();
+}
+
 export function activate(context: vscode.ExtensionContext) {
-	let stocks = loadChoiceStocks();
+	//console.log('activivate');
+	stocks = loadChoiceStocks();
+
+	const startCmd = vscode.commands.registerCommand('stockbar.start', restart);
+	const stopCmd = vscode.commands.registerCommand('stockbar.stop', stop);
 
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(() => {
-			stocks = loadChoiceStocks();
+			if (timer) {
+				restart();
+			}
 		}),
 	);
-
-	const task: () => any = async () => {
-		try {
-			// 从云端获取最新状态
-			logger.debug('call fetchData');
-			const data = await sinaStockProvider.fetch(stocks.map((v) => v.code));
-			// 更新本地的数据
-			for (const origin of data) {
-				const stock = stocks.find((v) => v.code === origin.code);
-				if (!stock) {
-					continue;
-				}
-				stock.update(origin);
-			}
-			// 渲染内容
-			logger.debug('render');
-			render(stocks);
-		} catch (e) {
-			logger.error('%O', e);
-		}
-
-		// 阻塞等待下一个循环
-		logger.debug('timer await');
-		await timer.await();
-
-		// 继续循环
-		return task();
-	};
-
-	// 丢进宏任务队列
-	setTimeout(task);
+	context.subscriptions.push(startCmd);
+	context.subscriptions.push(stopCmd);
 }
 
 export function deactivate() {

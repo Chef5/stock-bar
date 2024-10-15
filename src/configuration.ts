@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { StockOptions } from 'stock-bar';
+import { StockOptions, FutureOptions } from 'stock-bar';
 
 export default class Configuration {
 	/**
@@ -22,6 +22,16 @@ export default class Configuration {
 			return this.updateStocks(stocks as Record<string, string>);
 		}
 		return stocks as StockOptions;
+	}
+
+	static getFutures() {
+		const futures = Configuration.stockBarConfig().get('futures');
+		if (!futures) {
+			return [];
+		}
+		const items = futures as FutureOptions;
+		items.forEach((item) => (item.code = item.code.toUpperCase()));
+		return items;
 	}
 
 	static getUpdateInterval() {
