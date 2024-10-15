@@ -13,7 +13,7 @@ function loadChoiceStocks() {
 			return new Stock(v);
 		}
 		if (typeof v === 'object') {
-			return new Stock(v.code, v.alias);
+			return new Stock(v.code, v.alias, v.hold_price, v.hold_number);
 		}
 		throw new Error(
 			'配置格式错误, 查看 https://github.com/Chef5/stock-bar#配置',
@@ -25,7 +25,6 @@ let timer = null;
 let stocks: Stock[];
 
 function restart() {
-	//console.log('restart');
 	const interval = Configuration.getUpdateInterval();
 	if (timer) {
 		clearInterval(timer);
@@ -44,7 +43,7 @@ async function ticker() {
 	try {
 		// 从云端获取最新状态
 		logger.debug('call fetchData');
-		const [data, _] = await Promise.all([
+		const [data] = await Promise.all([
 			sinaStockProvider.fetch(stocks.map((v) => v.code)),
 			futureHandler.updateData(),
 		]);
@@ -66,7 +65,6 @@ async function ticker() {
 }
 
 function stop() {
-	//console.log('stop');
 	if (timer) {
 		clearInterval(timer);
 		timer = null;
@@ -75,7 +73,6 @@ function stop() {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	//console.log('activivate');
 	stocks = loadChoiceStocks();
 
 	const startCmd = vscode.commands.registerCommand('stockbar.start', restart);
@@ -90,6 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 	context.subscriptions.push(startCmd);
 	context.subscriptions.push(stopCmd);
+	restart(); // 初始默认打开
 }
 
 export function deactivate() {

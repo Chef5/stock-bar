@@ -4,6 +4,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { FutureOption } from 'stock-bar';
 import logger from './logger';
+import { keepDecimal } from './utils';
 
 class Provider {
 	instance: AxiosInstance;
@@ -15,12 +16,14 @@ class Provider {
 
 	async getBasicInfo(code: string) {
 		try {
-			const url = `https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code}`;
-			const results = await Promise.all([
-				this.instance.get(`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toUpperCase()}`),
-				this.instance.get(`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toLowerCase()}`)
-			])
-			const data = results[0].data.data || results[1].data.data || {};
+			const url = `https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toUpperCase()}`;
+			// const results = await Promise.all([
+			// 	this.instance.get(url),
+			// 	this.instance.get(url),
+			// ]);
+			// const data = results[0].data.data || results[1].data.data || {};
+			const result = await this.instance.get(url);
+			const data = result?.data?.data ?? {};
 			const name = data.name || '';
 			const tradeUnit = (data.trade_unit || '').trim();
 			let ratio = 0;
@@ -90,22 +93,31 @@ class ProviderSina extends Provider {
 				'Content-Type': 'application/json',
 			};
 			const url = `https://hq.sinajs.cn?list=nf_${code}`;
-			let ret = (await this.instance.get(url, { headers, responseType:'arraybuffer'})).data;
+			let ret = (
+				await this.instance.get(url, { headers, responseType: 'arraybuffer' })
+			).data;
 			ret = new TextDecoder('GBK').decode(ret);
 			const match = ret.match(/\"(.*)\"/);
 			if (!match) {
 				return null;
 			}
 			const arr = match[1].split(',');
-			if (arr.length <= 5) { return null; }
+			if (arr.length <= 5) {
+				return null;
+			}
 			const name = arr[0];
 			const open = parseFloat(arr[2]);
 			const high = parseFloat(arr[3]);
 			const low = parseFloat(arr[4]);
 			const current_price = parseFloat(arr[8]);
 			const pre_price = parseFloat(arr[10]);
+			const updown = keepDecimal((current_price ?? 0) - (pre_price ?? 0), 2);
 			return {
 				name,
+				open,
+				high,
+				low,
+				updown,
 				pre_price,
 				current_price,
 			};
@@ -128,6 +140,10 @@ export class FutureData {
 	inited = false;
 	init_times = 0;
 	price: {
+		open: number;
+		high: number;
+		low: number;
+		updown: string;
 		pre_price: number;
 		current_price: number;
 	} = null;
@@ -199,15 +215,3 @@ export default class FutureHandler {
 		await Promise.all(this.futures.map((item) => item.updatePrice()));
 	}
 }
-
-async function testGetBasicInfo() {
-	const data = await provider.getBasicInfo('cu2409');
-	console.log(data);
-}
-
-async function testGetPrice() {
-	const data = await provider.getLatestPrice('CU2409');
-	console.log(data);
-}
-
-testGetBasicInfo();

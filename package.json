@@ -29,7 +29,9 @@
 						"sh000001",
 						{
 							"code": "sz000001",
-							"alias": "平安"
+							"alias": "平安",
+							"hold_price": 0,
+							"hold_number": 0
 						}
 					],
 					"description": "股票代码数组，配置需要监控的股票代码，具体配置规则请查看插件详情页"
@@ -39,7 +41,8 @@
 					"default": [	
 						{
 							"code": "sa9999",
-							"hold_price": 2300,
+							"alias":  "铜",
+							"hold_price": 0,
 							"hold_number": -1
 						}					
 					],
@@ -65,11 +68,11 @@
 		"commands": [
 			{
 				"command": "stockbar.start",
-				"title": "stock watch start"
+				"title": "Show Stock Bar"
 			},
 			{
 				"command": "stockbar.stop",
-				"title": "stock watch stop"
+				"title": "Hide Stock Bar"
 			}
 		]
 	},
