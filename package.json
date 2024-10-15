@@ -2,7 +2,7 @@
 	"name": "stock-bar",
 	"displayName": "Stock Bar",
 	"description": "股票监控，底部状态栏实时更新 A股|港股|美股|实时股票数据",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"publisher": "Chef",
 	"license": "MIT",
 	"keywords": [
