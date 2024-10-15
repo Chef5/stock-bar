@@ -88,6 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(startCmd);
 	context.subscriptions.push(stopCmd);
 	restart(); // 初始默认打开
+
 }
 
 export function deactivate() {
