@@ -79,7 +79,7 @@ export const render = (stocks: any) => {
 let futureBars: vscode.StatusBarItem[] = [];
 
 export function stopAllRender() {
-	for (const [code, item] of stockHub) {
+	for (const [, item] of stockHub) {
 		const barItem = item.barItem;
 		barItem.hide();
 		barItem.dispose();

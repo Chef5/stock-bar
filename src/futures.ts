@@ -16,16 +16,14 @@ class Provider {
 
 	async getBasicInfo(code: string) {
 		try {
-			const url = `https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code}`;
-			const results = await Promise.all([
-				this.instance.get(
-					`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toUpperCase()}`,
-				),
-				this.instance.get(
-					`https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toLowerCase()}`,
-				),
-			]);
-			const data = results[0].data.data || results[1].data.data || {};
+			const url = `https://fupage.10jqka.com.cn/futgwapi/api/f10/contract/v1/info?code=${code.toUpperCase()}`;
+			// const results = await Promise.all([
+			// 	this.instance.get(url),
+			// 	this.instance.get(url),
+			// ]);
+			// const data = results[0].data.data || results[1].data.data || {};
+			const result = await this.instance.get(url);
+			const data = result?.data?.data ?? {};
 			const name = data.name || '';
 			const tradeUnit = (data.trade_unit || '').trim();
 			let ratio = 0;

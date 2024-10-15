@@ -43,7 +43,7 @@ async function ticker() {
 	try {
 		// 从云端获取最新状态
 		logger.debug('call fetchData');
-		const [data, _] = await Promise.all([
+		const [data] = await Promise.all([
 			sinaStockProvider.fetch(stocks.map((v) => v.code)),
 			futureHandler.updateData(),
 		]);
@@ -88,7 +88,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(startCmd);
 	context.subscriptions.push(stopCmd);
 	restart(); // 初始默认打开
-
 }
 
 export function deactivate() {
