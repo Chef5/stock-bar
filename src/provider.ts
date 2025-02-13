@@ -128,7 +128,12 @@ class SinaStockTransform {
 	 * 今开
 	 */
 	get open(): number {
-		return Number(this.params[1]);
+		switch (this.code.slice(0, 2)) {
+			case 'hk':
+				return Number(this.params[2] || 0);
+			default:
+				return Number(this.params[1] || 0);
+		}
 	}
 
 	/**

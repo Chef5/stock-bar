@@ -49,7 +49,7 @@ async function ticker() {
 		]);
 		// 更新本地的数据
 		for (const origin of data) {
-			const stock = stocks.find((v) => v.code === origin.code);
+			const stock = stocks.find((v) => v.code.toLowerCase() === origin.code);
 			if (!stock) {
 				continue;
 			}
