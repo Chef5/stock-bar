@@ -143,7 +143,7 @@ class SinaStockTransform {
 		return this.fixed(this.price - this.yestclose);
 	}
 
-	fixed(n: number, q = 2) {
+	fixed(n: number, q = 3) {
 		return Math.round(n * 10 ** q) / 10 ** q;
 	}
 
