@@ -25,7 +25,7 @@ class SinaStockTransform {
 				return String(this.params[0] || '---');
 			case 'hk':
 				return String(this.params[1] || '---');
-			case 'us':
+			case 'gb':
 				return String(this.params[0] || '---');
 			case 'bj':
 				return String(this.params[0] || '---');
@@ -45,7 +45,7 @@ class SinaStockTransform {
 				return Number(this.params[3] || 0);
 			case 'hk':
 				return Number(this.params[6] || 0);
-			case 'us':
+			case 'gb':
 				return Number(this.params[1] || 0);
 			case 'bj':
 				return Number(this.params[3] || 0);
@@ -65,7 +65,7 @@ class SinaStockTransform {
 				return Number(this.params[5] || 0);
 			case 'hk':
 				return Number(this.params[5] || 0);
-			case 'us':
+			case 'gb':
 				return Number(this.params[7] || 0);
 			case 'bj':
 				return Number(this.params[5] || 0);
@@ -85,7 +85,7 @@ class SinaStockTransform {
 				return Number(this.params[4] || 0);
 			case 'hk':
 				return Number(this.params[4] || 0);
-			case 'us':
+			case 'gb':
 				return Number(this.params[6] || 0);
 			case 'bj':
 				return Number(this.params[4] || 0);
@@ -105,7 +105,7 @@ class SinaStockTransform {
 				return Number(this.params[2] || 0);
 			case 'hk':
 				return Number(this.params[3] || 0);
-			case 'us':
+			case 'gb':
 				return Number(this.params[26] || 0);
 			case 'bj':
 				return Number(this.params[2] || 0);
