@@ -111,6 +111,9 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
   <a href="https://github.com/boweipacer">
     <img src="https://github.com/boweipacer.png?size=100" width="100" height="100" style="border-radius: 50%;" />
   </a>
+  <a href="https://github.com/capadong">
+    <img src="https://github.com/capadong.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
 </p>
 
 ## 版本许可
