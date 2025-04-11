@@ -6,7 +6,7 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
 
 `Stock Bar` 默认只会显示股价、百分点这样的纯数字，当你将鼠标移上去就可以查看详情。当然为了区分，也可以自定义显示股票的名称。
 
-![image](https://raw.githubusercontent.com/Chef5/stock-bar/main/stock-bar-plugin.png)
+![image](https://img.cdn.1zdz.cn/github/readme/stock-bar-plugin.png)
 
 插件已开源，开源地址：[Github](https://github.com/Chef5/stock-bar)，欢迎点星星 ⭐️、提 issue 或者 pr
 
@@ -110,6 +110,9 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
   </a>
   <a href="https://github.com/boweipacer">
     <img src="https://github.com/boweipacer.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
+  <a href="https://github.com/capadong">
+    <img src="https://github.com/capadong.png?size=100" width="100" height="100" style="border-radius: 50%;" />
   </a>
 </p>
 
