@@ -19,7 +19,7 @@ export default class Stock {
 		hold_price?: number | undefined,
 		hold_number?: number | undefined,
 	) {
-		this.code = code;
+		this.setCode(code);
 		this.symbol = code;
 		this.name = null;
 		this.alias = alias ?? '';
@@ -35,5 +35,12 @@ export default class Stock {
 		this.percent = origin.percent;
 		this.open = origin.open;
 		this.yestclose = origin.yestclose;
+	}
+	setCode(code: string) {
+		if (code.slice(0, 2) === 'US') {
+			this.code = code.toLowerCase().replace('us_', 'gb_');
+			return;
+		}
+		this.code = code;
 	}
 }
