@@ -80,6 +80,10 @@
 			{
 				"command": "stockbar.stop",
 				"title": "Hide Stock Bar"
+			},
+			{
+				"command": "stockbar.add",
+				"title": "Add Stock Bar"
 			}
 		]
 	},
