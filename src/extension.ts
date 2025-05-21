@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { sinaStockProvider } from './provider';
+import { stockProvider } from './provider';
 import { render, renderFutures, stopAllRender } from './render';
 import Stock from './stock';
 import FutureHandler from './futures';
@@ -44,7 +44,7 @@ async function ticker() {
 		// 从云端获取最新状态
 		logger.debug('call fetchData');
 		const [data] = await Promise.all([
-			sinaStockProvider.fetch(stocks.map((v) => v.code)),
+			stockProvider.fetch(stocks.map((v) => v.code)),
 			futureHandler.updateData(),
 		]);
 		// 更新本地的数据

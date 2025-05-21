@@ -47,6 +47,20 @@ export default class Configuration {
 		return Configuration.stockBarConfig().get('fallColor');
 	}
 
+	/**
+	 * 获取是否使用qos.hk接口获取港美股实时数据
+	 */
+	static getUseQosForHkUs() {
+		return Configuration.stockBarConfig().get('useQosForHkUs') === true;
+	}
+
+	/**
+	 * 获取qos.hk接口的token
+	 */
+	static getQosHkToken() {
+		return Configuration.stockBarConfig().get('qosHkToken') as string;
+	}
+
 	static updateStocks(stocks: Record<string, string>) {
 		const newStocks: StockOptions = Object.entries(stocks).map(
 			([code, alias]) => (alias ? { code, alias } : code),
