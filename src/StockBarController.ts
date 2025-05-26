@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import logger from './logger';
 import Configuration from './configuration';
-import { stockProvider } from './provider';
+import { stockProvider, sinaStockProvider } from './provider';
 import { render, renderFutures, stopAllRender } from './render';
 import Stock from './stock';
 import FutureHandler from './futures';
@@ -80,9 +80,18 @@ export default class StockBarController {
 	}
 
 	private async searchStocks(query: string): Promise<void> {
-		const stockItems = await sinaStockProvider.fetch([query]);
+		const fixCode = (code: string) => {
+			if (code.startsWith('6')) {
+				return `sh${code}`;
+			}
+			if (code.startsWith('0') || code.startsWith('3')) {
+				return `sz${code}`;
+			}
+			return code;
+		};
+		const stockItems = await sinaStockProvider.fetch([fixCode(query)]);
 		const selectionItems: StockQuickPickItem[] = stockItems.map((stock) => ({
-			label: stock.name,
+			label: stock.name === '---' ? '无结果' : stock.name,
 			action: () => this.handleStockSelection(stock),
 		}));
 
