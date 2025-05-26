@@ -51,6 +51,12 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
 
 // 股票跌的颜色，默认跟随系统
 "stock-bar.fallColor": ""
+
+// 是否启用qos.hk接口获取港美股实时行情（需要配置token）
+"stock-bar.useQosForHkUs": false
+
+// qos.hk接口的token，用于获取港美股实时行情
+"stock-bar.qosHkToken": ""
 ```
 
 ## 股票配置说明
