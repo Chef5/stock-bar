@@ -16,6 +16,7 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
 
 - `Show Stock Bar` 显示 Stock Bar
 - `Hide Stock Bar` 关闭 Stock Bar（后台不再发起更新数据请求）
+- `Add Stock Bar` 添加 Stock Bar 股票配置
 
 ## 插件配置
 
