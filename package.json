@@ -92,8 +92,16 @@
 				"title": "Hide Stock Bar"
 			},
 			{
-				"command": "stockbar.add",
+				"command": "stockbar.add.stock",
 				"title": "Add Stock Bar"
+			},
+			{
+				"command": "stockbar.add.future",
+				"title": "Add Future Bar"
+			},
+			{
+				"command": "stockbar.manage.assets",
+				"title": "Manage Stock/Future Bar"
 			}
 		]
 	},
