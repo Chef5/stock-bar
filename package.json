@@ -98,6 +98,10 @@
 			{
 				"command": "stockbar.add.future",
 				"title": "Add Future Bar"
+			},
+			{
+				"command": "stockbar.manage.assets",
+				"title": "Manage Stock/Future Bar"
 			}
 		]
 	},
