@@ -43,8 +43,9 @@ function getTooltipText(item: Stock) {
 		const dailyPnLStr = dailyPnL > 0 ? `+${dailyPnL}` : `${dailyPnL}`;
 		tooltips.push(`当日盈亏：${dailyPnLStr}`);
 
+		const effectivePrice = item.price || item.yestclose;
 		const totalPnL = Math.round(
-			(item.price - item.hold_price) * item.hold_number,
+			(effectivePrice - item.hold_price) * item.hold_number,
 		);
 		const totalPnLStr = totalPnL > 0 ? `+${totalPnL}` : `${totalPnL}`;
 		tooltips.push(`持仓盈亏：${totalPnLStr}`);
