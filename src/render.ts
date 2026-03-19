@@ -43,7 +43,7 @@ function getTooltipText(item: Stock) {
 		const dailyPnLStr = dailyPnL > 0 ? `+${dailyPnL}` : `${dailyPnL}`;
 		tooltips.push(`当日盈亏：${dailyPnLStr}`);
 
-		const effectivePrice = item.price || item.yestclose;
+		const effectivePrice = item.price || item.yestclose || item.hold_price;
 		const totalPnL = Math.round(
 			(effectivePrice - item.hold_price) * item.hold_number,
 		);
@@ -109,7 +109,7 @@ function renderAccountPnL(stocks: Stock[]) {
 			const pnl = Math.round(stock.updown * stock.hold_number);
 			totalDailyPnL += pnl;
 			const pnlStr = pnl > 0 ? `+${pnl}` : `${pnl}`;
-			details.push(`${stock.alias ?? stock.name}：${pnlStr}`);
+			details.push(`${stock.alias || stock.name || stock.code}：${pnlStr}`);
 		}
 	}
 
