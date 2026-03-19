@@ -141,6 +141,9 @@ class SinaStockTransform {
 	 * 涨跌价格
 	 */
 	get updown() {
+		if (!this.price) {
+			return 0;
+		}
 		return this.fixed(this.price - this.yestclose);
 	}
 
@@ -297,7 +300,7 @@ class QosHkStockProvider {
 			const price = Number(item.lp);
 			const yestclose = Number(item.yp);
 			const percent = yestclose ? (price - yestclose) / yestclose : 0;
-			const updown = price - yestclose;
+			const updown = price ? price - yestclose : 0;
 
 			return {
 				code: formattedCode,

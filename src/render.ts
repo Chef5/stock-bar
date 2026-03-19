@@ -6,6 +6,7 @@ import { calcFixedNumber, keepDecimal } from './utils';
 import { FutureData } from './futures';
 
 const stockHub = new Map();
+let accountPnLBar: vscode.StatusBarItem | null = null;
 
 function getItemColor(item: Stock) {
 	return item.percent >= 0
@@ -14,16 +15,23 @@ function getItemColor(item: Stock) {
 }
 
 function getItemText(item: Stock) {
-	return format(
+	const hasHold = item.hold_number > 0;
+	const base = format(
 		'%s %s %s%',
 		item.alias ?? item.name,
 		keepDecimal(item.price, calcFixedNumber(item)),
 		keepDecimal(item.percent * 100, 2),
 	);
+	if (hasHold) {
+		const dailyPnL = Math.round(item.updown * item.hold_number);
+		const dailyPnLStr = dailyPnL > 0 ? `+${dailyPnL}` : `${dailyPnL}`;
+		return `${base} [${dailyPnLStr}]`;
+	}
+	return base;
 }
 
 function getTooltipText(item: Stock) {
-	const hasHold = item.hold_price && item.hold_number;
+	const hasHold = item.hold_number > 0;
 	const tooltips = [
 		`【${item.name}】今日行情`,
 		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%`,
@@ -31,11 +39,16 @@ function getTooltipText(item: Stock) {
 		`今开：${item.open}   昨收：${item.yestclose}`,
 	];
 	if (hasHold) {
-		const balance = Math.round(
-			(item.price - item.hold_price) * item.hold_number,
+		const dailyPnL = Math.round(item.updown * item.hold_number);
+		const dailyPnLStr = dailyPnL > 0 ? `+${dailyPnL}` : `${dailyPnL}`;
+		tooltips.push(`当日盈亏：${dailyPnLStr}`);
+
+		const effectivePrice = item.price || item.yestclose || item.hold_price;
+		const totalPnL = Math.round(
+			(effectivePrice - item.hold_price) * item.hold_number,
 		);
-		const balanceStr = balance > 0 ? `+${balance}` : `${balance}`;
-		tooltips.push(`盈亏：${balanceStr}`);
+		const totalPnLStr = totalPnL > 0 ? `+${totalPnL}` : `${totalPnL}`;
+		tooltips.push(`持仓盈亏：${totalPnLStr}`);
 	}
 	return tooltips.join('\n');
 }
@@ -48,7 +61,7 @@ function getTooltipText(item: Stock) {
 export const render = (stocks: any) => {
 	// 移除 配置更新后被删除的股票
 	const deleted = Array.from(stockHub.keys()).filter(
-		(code) => !(code in stocks),
+		(code) => !stocks.some((s: Stock) => s.code === code),
 	);
 	for (const item of deleted) {
 		stockHub.get(item).barItem.hide();
@@ -57,26 +70,75 @@ export const render = (stocks: any) => {
 	}
 
 	// 配置更新后添加的股票
-	const added = Array.from(Object.keys(stocks)).filter(
-		(code) => !stockHub.has(code),
+	const added = stocks.filter(
+		(s: Stock) => !stockHub.has(s.code),
 	);
 	for (const item of added) {
 		const barItem = vscode.window.createStatusBarItem(
 			vscode.StatusBarAlignment.Left,
 		);
-		stockHub.set(item, { barItem });
+		stockHub.set(item.code, { barItem });
 		barItem.show();
 	}
 
 	// 更新股票的价格
-	for (const code in Object.keys(stocks)) {
-		stockHub.get(code).barItem.text = getItemText(stocks[code]);
-		stockHub.get(code).barItem.color = getItemColor(stocks[code]);
-		stockHub.get(code).barItem.tooltip = getTooltipText(stocks[code]);
+	for (const stock of stocks) {
+		const barItem = stockHub.get(stock.code);
+		if (barItem) {
+			barItem.barItem.text = getItemText(stock);
+			barItem.barItem.color = getItemColor(stock);
+			barItem.barItem.tooltip = getTooltipText(stock);
+		}
 	}
+
+	// 渲染账户当日盈亏汇总
+	renderAccountPnL(stocks);
 };
 
 let futureBars: vscode.StatusBarItem[] = [];
+
+function renderAccountPnL(stocks: Stock[]) {
+	// 汇总所有持仓股票的当日盈亏
+	let totalDailyPnL = 0;
+	let hasAnyHold = false;
+	const details: string[] = [];
+
+	for (const stock of stocks) {
+		if (stock.hold_number > 0) {
+			hasAnyHold = true;
+			const pnl = Math.round(stock.updown * stock.hold_number);
+			totalDailyPnL += pnl;
+			const pnlStr = pnl > 0 ? `+${pnl}` : `${pnl}`;
+			details.push(`${stock.alias || stock.name || stock.code}：${pnlStr}`);
+		}
+	}
+
+	if (!hasAnyHold) {
+		if (accountPnLBar) {
+			accountPnLBar.hide();
+			accountPnLBar.dispose();
+			accountPnLBar = null;
+		}
+		return;
+	}
+
+	if (!accountPnLBar) {
+		accountPnLBar = vscode.window.createStatusBarItem(
+			vscode.StatusBarAlignment.Left,
+		);
+		accountPnLBar.show();
+	}
+
+	const pnlStr = totalDailyPnL > 0 ? `+${totalDailyPnL}` : `${totalDailyPnL}`;
+	accountPnLBar.text = `今日：${pnlStr}`;
+	accountPnLBar.color =
+		totalDailyPnL >= 0
+			? (Configuration.getRiseColor() as string)
+			: (Configuration.getFallColor() as string);
+
+	const tooltipLines = ['【账户当日盈亏】', ...details, `合计：${pnlStr}`];
+	accountPnLBar.tooltip = tooltipLines.join('\n');
+}
 
 export function stopAllRender() {
 	for (const [, item] of stockHub) {
@@ -85,6 +147,12 @@ export function stopAllRender() {
 		barItem.dispose();
 	}
 	stockHub.clear();
+
+	if (accountPnLBar) {
+		accountPnLBar.hide();
+		accountPnLBar.dispose();
+		accountPnLBar = null;
+	}
 
 	for (const item of futureBars) {
 		const barItem = item;
