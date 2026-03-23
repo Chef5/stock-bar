@@ -47,6 +47,11 @@ export default class Configuration {
 		return Configuration.stockBarConfig().get('fallColor');
 	}
 
+	static getShowAccountPnL() {
+		const showAccountPnL = Configuration.stockBarConfig().get('showAccountPnL');
+		return showAccountPnL !== false;
+	}
+
 	/**
 	 * 获取是否使用qos.hk接口获取港美股实时数据
 	 */

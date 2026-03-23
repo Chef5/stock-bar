@@ -8,6 +8,15 @@ import { FutureData } from './futures';
 const stockHub = new Map();
 let accountPnLBar: vscode.StatusBarItem | null = null;
 
+function hideAccountPnLBar() {
+	if (!accountPnLBar) {
+		return;
+	}
+	accountPnLBar.hide();
+	accountPnLBar.dispose();
+	accountPnLBar = null;
+}
+
 function getItemColor(item: Stock) {
 	return item.percent >= 0
 		? Configuration.getRiseColor()
@@ -16,13 +25,14 @@ function getItemColor(item: Stock) {
 
 function getItemText(item: Stock) {
 	const hasHold = item.hold_number > 0;
+	const showAccountPnL = Configuration.getShowAccountPnL();
 	const base = format(
 		'%s %s %s%',
 		item.alias ?? item.name,
 		keepDecimal(item.price, calcFixedNumber(item)),
 		keepDecimal(item.percent * 100, 2),
 	);
-	if (hasHold) {
+	if (showAccountPnL && hasHold) {
 		const dailyPnL = Math.round(item.updown * item.hold_number);
 		const dailyPnLStr = dailyPnL > 0 ? `+${dailyPnL}` : `${dailyPnL}`;
 		return `${base} [${dailyPnLStr}]`;
@@ -70,9 +80,7 @@ export const render = (stocks: any) => {
 	}
 
 	// 配置更新后添加的股票
-	const added = stocks.filter(
-		(s: Stock) => !stockHub.has(s.code),
-	);
+	const added = stocks.filter((s: Stock) => !stockHub.has(s.code));
 	for (const item of added) {
 		const barItem = vscode.window.createStatusBarItem(
 			vscode.StatusBarAlignment.Left,
@@ -92,7 +100,11 @@ export const render = (stocks: any) => {
 	}
 
 	// 渲染账户当日盈亏汇总
-	renderAccountPnL(stocks);
+	if (Configuration.getShowAccountPnL()) {
+		renderAccountPnL(stocks);
+	} else {
+		hideAccountPnLBar();
+	}
 };
 
 let futureBars: vscode.StatusBarItem[] = [];
@@ -114,11 +126,7 @@ function renderAccountPnL(stocks: Stock[]) {
 	}
 
 	if (!hasAnyHold) {
-		if (accountPnLBar) {
-			accountPnLBar.hide();
-			accountPnLBar.dispose();
-			accountPnLBar = null;
-		}
+		hideAccountPnLBar();
 		return;
 	}
 
@@ -148,11 +156,7 @@ export function stopAllRender() {
 	}
 	stockHub.clear();
 
-	if (accountPnLBar) {
-		accountPnLBar.hide();
-		accountPnLBar.dispose();
-		accountPnLBar = null;
-	}
+	hideAccountPnLBar();
 
 	for (const item of futureBars) {
 		const barItem = item;
