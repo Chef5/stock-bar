@@ -40,17 +40,26 @@ function getItemText(item: Stock) {
 	return base;
 }
 
-function formatVolume(volume: number): string {
-	if (!volume || volume <= 0) {
+function formatYiWan(value: number, unit: string): string {
+	if (!value || value <= 0) {
 		return '0';
 	}
-	if (volume >= 100000000) {
-		return `${(volume / 100000000).toFixed(2)}亿`;
+	if (value >= 100000000) {
+		return `${(value / 100000000).toFixed(2)}亿${unit}`;
 	}
-	if (volume >= 10000) {
-		return `${(volume / 10000).toFixed(2)}万`;
+	if (value >= 10000) {
+		return `${(value / 10000).toFixed(2)}万${unit}`;
 	}
-	return String(volume);
+	return `${Number(value.toFixed(2))}${unit}`;
+}
+
+function formatVolume(item: Stock): string {
+	// 接口成交量为股，展示按手（1手 = 100股）
+	return formatYiWan(item.volume / 100, '手');
+}
+
+function formatAmount(item: Stock): string {
+	return formatYiWan(item.amount, '');
 }
 
 function getTooltipText(item: Stock) {
@@ -60,7 +69,7 @@ function getTooltipText(item: Stock) {
 		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%`,
 		`最高：${item.high}   最低：${item.low}`,
 		`今开：${item.open}   昨收：${item.yestclose}`,
-		`成交量：${formatVolume(item.volume)}`,
+		`成交量：${formatVolume(item)}   成交额：${formatAmount(item)}`,
 	];
 	if (hasHold) {
 		const dailyPnL = Math.round(item.updown * item.hold_number);

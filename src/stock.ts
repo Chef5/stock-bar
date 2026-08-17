@@ -13,6 +13,7 @@ export default class Stock {
 	open = 0;
 	yestclose = 0;
 	volume = 0;
+	amount = 0;
 
 	constructor(
 		code: string,
@@ -37,6 +38,7 @@ export default class Stock {
 		this.open = origin.open;
 		this.yestclose = origin.yestclose;
 		this.volume = origin.volume;
+		this.amount = origin.amount;
 	}
 	setCode(code: string) {
 		if (code.slice(0, 2) === 'US') {

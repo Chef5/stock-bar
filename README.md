@@ -145,6 +145,12 @@ VScode 插件 | A 股 | 港股 | 期货 | 实时股票数据 | 状态栏实时�
   <a href="https://github.com/ZeXuanAc">
     <img src="https://github.com/ZeXuanAc.png?size=100" width="100" height="100" style="border-radius: 50%;" />
   </a>
+  <a href="https://github.com/yncmj">
+    <img src="https://github.com/yncmj.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
+  <a href="https://github.com/webbrain-one">
+    <img src="https://github.com/webbrain-one.png?size=100" width="100" height="100" style="border-radius: 50%;" />
+  </a>
 </p>
 
 ## 版本许可
