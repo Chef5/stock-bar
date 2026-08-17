@@ -40,6 +40,19 @@ function getItemText(item: Stock) {
 	return base;
 }
 
+function formatVolume(volume: number): string {
+	if (!volume || volume <= 0) {
+		return '0';
+	}
+	if (volume >= 100000000) {
+		return `${(volume / 100000000).toFixed(2)}亿`;
+	}
+	if (volume >= 10000) {
+		return `${(volume / 10000).toFixed(2)}万`;
+	}
+	return String(volume);
+}
+
 function getTooltipText(item: Stock) {
 	const hasHold = item.hold_number > 0;
 	const tooltips = [
@@ -47,6 +60,7 @@ function getTooltipText(item: Stock) {
 		`涨跌：${item.updown}   百分：${keepDecimal(item.percent * 100, 2)}%`,
 		`最高：${item.high}   最低：${item.low}`,
 		`今开：${item.open}   昨收：${item.yestclose}`,
+		`成交量：${formatVolume(item.volume)}`,
 	];
 	if (hasHold) {
 		const dailyPnL = Math.round(item.updown * item.hold_number);
