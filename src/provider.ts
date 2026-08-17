@@ -138,6 +138,26 @@ class SinaStockTransform {
 	}
 
 	/**
+	 * 获取成交量
+	 */
+	get volume(): number {
+		switch (this.code.slice(0, 2)) {
+			case 'sh':
+				return Number(this.params[8] || 0);
+			case 'sz':
+				return Number(this.params[8] || 0);
+			case 'hk':
+				return Number(this.params[9] || 0);
+			case 'gb':
+				return Number(this.params[9] || 0);
+			case 'bj':
+				return Number(this.params[8] || 0);
+			default:
+				return 0;
+		}
+	}
+
+	/**
 	 * 涨跌价格
 	 */
 	get updown() {
@@ -165,6 +185,7 @@ class SinaStockTransform {
 			low: this.low,
 			high: this.high,
 			yestclose: this.yestclose,
+			volume: this.volume,
 		};
 	}
 }
@@ -312,6 +333,7 @@ class QosHkStockProvider {
 				percent: Number(percent.toFixed(4)),
 				updown: Number(updown.toFixed(3)),
 				yestclose: yestclose,
+				volume: Number(item.v || 0),
 			};
 		});
 	}

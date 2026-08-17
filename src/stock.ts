@@ -12,6 +12,7 @@ export default class Stock {
 	low = 0;
 	open = 0;
 	yestclose = 0;
+	volume = 0;
 
 	constructor(
 		code: string,
@@ -35,6 +36,7 @@ export default class Stock {
 		this.percent = origin.percent;
 		this.open = origin.open;
 		this.yestclose = origin.yestclose;
+		this.volume = origin.volume;
 	}
 	setCode(code: string) {
 		if (code.slice(0, 2) === 'US') {
