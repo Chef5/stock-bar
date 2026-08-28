@@ -4,9 +4,14 @@ import Configuration from './configuration';
 import { stockProvider, sinaStockProvider } from './provider';
 import { render, renderFutures, stopAllRender } from './render';
 import Stock from './stock';
-import FutureHandler from './futures';
+import FutureHandler, { sinaFutureProvider } from './futures';
 import { clearInterval } from 'timers';
 import { StockQuickPickItem } from './vscode/StockQuickPickItem';
+
+enum SearchType {
+	Stock = 'stock',
+	Future = 'future',
+}
 
 export default class StockBarController {
 	private timer: NodeJS.Timer | null = null;
@@ -90,6 +95,7 @@ export default class StockBarController {
 			return code;
 		};
 		const stockItems = await sinaStockProvider.fetch([fixCode(query)]);
+
 		const selectionItems: StockQuickPickItem[] = stockItems.map((stock) => ({
 			label: stock.name === '---' ? '无结果' : stock.name,
 			action: () => this.handleStockSelection(stock),
@@ -97,7 +103,24 @@ export default class StockBarController {
 
 		selectionItems.push({
 			label: '返回',
-			action: () => this.openSearch(),
+			action: () => this.openSearch(SearchType.Stock),
+		});
+
+		this.openQuickPick(selectionItems);
+	}
+
+	private async searchFutures(query: string): Promise<void> {
+		const selectionItems: StockQuickPickItem[] = [];
+		const futureItem = await sinaFutureProvider.getBasicInfo(query);
+
+		selectionItems.push({
+			label: futureItem.name === '' ? '无结果' : futureItem.name,
+			action: () => this.handleFutureSelection(futureItem),
+		});
+
+		selectionItems.push({
+			label: '返回',
+			action: () => this.openSearch(SearchType.Future),
 		});
 
 		this.openQuickPick(selectionItems);
@@ -141,7 +164,43 @@ export default class StockBarController {
 		}
 	}
 
-	private async openSearch(): Promise<void> {
+	private async handleFutureSelection(future: any): Promise<void> {
+		if (future.name === '') {
+			vscode.window.showErrorMessage('期货代码不存在，请重新重新添加！');
+			return;
+		}
+
+		const code = future.code.toLowerCase();
+		const currentFutures = Configuration.getFutures() || [];
+		const exists = currentFutures.some(
+			(item) => (item.code?.toLowerCase() ?? '') === code,
+		);
+
+		if (!exists) {
+			currentFutures.push({
+				code,
+				alias: future.name,
+				hold_price: 0,
+				hold_number: 0,
+			});
+			await Configuration.stockBarConfig().update(
+				'futures',
+				currentFutures,
+				vscode.ConfigurationTarget.Global,
+			);
+			vscode.window.showInformationMessage(
+				`已成功添加：${future.name} (${code})`,
+			);
+			this.quickPick.hide();
+			this.restart();
+		} else {
+			vscode.window.showInformationMessage(
+				`期货 ${future.name} (${code}) 已存在！`,
+			);
+		}
+	}
+
+	private async openSearch(type: SearchType): Promise<void> {
 		const input = await vscode.window.showInputBox({
 			prompt: `sh：沪市，不加前缀的情况下，6 开头的代码默认加上 sh（上证指数：sh000001）
 				sz：深市，不加前缀的情况下，除 6 开头的代码外，默认加上 sz
@@ -157,13 +216,18 @@ export default class StockBarController {
 				hkGEM：标普香港创业板指（港股指数）
 				US_DOWJONES：道琼斯指数（美股指数）
 				US_NASDAQ：纳斯达克（美股指数）
-				US_SP500：标普 500（美股指数）`,
+				US_SP500：标普 500（美股指数）
+				期货代码: 如：cu2409、sa2409`,
 			placeHolder:
 				'请输入股票代码，支持沪深、港股、美股，具体格式参考占位文本说明',
 		});
 
 		if (input?.trim()) {
-			await this.searchStocks(input.trim());
+			if (type == SearchType.Stock) {
+				await this.searchStocks(input.trim());
+			} else if (type == SearchType.Future) {
+				await this.searchFutures(input.trim());
+			}
 		}
 	}
 
@@ -186,7 +250,12 @@ export default class StockBarController {
 		context.subscriptions.push(
 			vscode.commands.registerCommand('stockbar.start', () => this.restart()),
 			vscode.commands.registerCommand('stockbar.stop', () => this.stop()),
-			vscode.commands.registerCommand('stockbar.add', () => this.openSearch()),
+			vscode.commands.registerCommand('stockbar.add.stock', () =>
+				this.openSearch(SearchType.Stock),
+			),
+			vscode.commands.registerCommand('stockbar.add.future', () =>
+				this.openSearch(SearchType.Future),
+			),
 			vscode.workspace.onDidChangeConfiguration(() => {
 				if (this.timer) this.restart();
 			}),

@@ -215,3 +215,5 @@ export default class FutureHandler {
 		await Promise.all(this.futures.map((item) => item.updatePrice()));
 	}
 }
+
+export const sinaFutureProvider = provider;
